@@ -1,0 +1,17 @@
+﻿@model FinalProject.Associate.VM.TweetVM
+
+    <div class="col-md-6 mt-0">
+        <form asp-action="Add" asp-controller="Comment" method="post" enctype="multipart/form-data">
+            <input type="hidden" value="@Model.Tweet.Id" id="tweetId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group bg-black ">
+                <span><textarea id="commentContent" asp-for="Comment.Content" class="form-control bg-black" placeholder="Please add comment here..."></textarea></span>
+                <span asp-validation-for="Comment.Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="button" id="commentAdd" value="Add" class="btn-xs btn-primary" />
+            </div>
+        </form>
+    </div>
+
+ 

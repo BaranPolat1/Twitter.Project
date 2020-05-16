@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IQueryable<Microsoft.AspNetCore.Identity.IdentityRole>
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["message"]
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Role Id
+            </th>
+            <th>
+                Role Name
+            </th>
+            <th>
+                User
+            </th>
+
+            <th></th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center">No Roles</td>
+            </tr>
+
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", "Role", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+
+

@@ -1,0 +1,16 @@
+﻿@model FinalProject.Associate.DTO.TweetDTO
+    <div class="row">
+        <div class="col-md-6 mt-2">
+            <form asp-action="Add" asp-controller="Tweet" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group ">
+                    <span><textarea style="background-color:black" placeholder="Neler oluyor?" id="content"asp-for="Content" class="form-control p-0 my-0" ></textarea><input type="file" id="file" data-preview-file-type="text" multiple style="background-color:black" class="form-control p-0 my-0" placeholder="Add Image" /></span>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="button" id="ekle" value="Tweetle" class="btn-xs btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>

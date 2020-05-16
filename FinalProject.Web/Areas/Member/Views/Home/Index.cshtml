@@ -1,0 +1,51 @@
+﻿@model FinalProject.Associate.VM.TweetVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("_TweetAddPartial", Model.Tweet)
+
+<div class="my-0 p-0 bg-black rounded shadow-sm col-md-8 " id="" style="background-color:black">
+    <h6 class="border-bottom border-gray pb-2 mb-0" style="background-color: black">
+        <span style="color:white"><b>TimeLine</b></span>
+    </h6>
+    @await Html.PartialAsync("_TweetShowPartial", Model.Tweets)
+    @await Html.PartialAsync("_RetweetShowPartial", Model.Retweets)
+</div>
+
+
+@section scripts2{
+    <script src="~/js/MyIndex.js"></script>
+    <script>
+        document.querySelector("#ekle").addEventListener('click', ekle);
+        function ekle() {
+            var content = $("#content").val();
+            if (content == "") {
+                alert("Bu alan boş geçilemez!");
+            }
+            else {
+                var username = '@User.Identity.Name';
+                $.ajax({
+                dataType: 'JSON',
+                data: { "content": content},
+                type: 'POST',
+                url: "/Member/Tweet/Add",
+                    success: function () {
+                        document.querySelector(".baran").innerHTML += "<div class='media text-muted pt-3'>" +  "<img width='40' height='40' src='~/media/user/@Url.Content("item.User.ImagePath")'>" + "<p class='media-body pb-1 mb-0 ml-2 small lh-125 border-bottom border-gray'>" + "<strong class='d-block text-gray-dark' style='color:blue'>" + username + "</strong>" + "<a href='#'>" + "<b class='contentTweet' style='color:white' >" + content + "</b>" + "</a>" + "<br/>" + "<a class='like' href='#'>" + "<svg class='bi bi-heart' width ='1em' height='1em'viewBox='0 0 20 20'fill='currentColor' xmlns='http://www.w3.org/2000/svg'>" + "<path fill-rule='evenodd' d='M10 4.748l-.717-.737C7.6 2.281 4.514 2.878 3.4 5.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.837-3.362.314-4.385-1.114-2.175-4.2-2.773-5.883-1.043L10 4.748zM10 17C-5.333 6.868 5.279-1.04 9.824 3.143c.06.055.119.112.176.171a3.12 3.12 0 01.176-.17C14.72-1.042 25.333 6.867 10 17z' clip-rule='evenodd'>" + "</path>" + "</svg>" + "<span class='like-count'>" + "0" + "</span>" + " </a>" + "<a class='retweet'  href='#'>" + "<svg class='bi bi-reply' width='1em' height='1em' viewBox='0 0 20 20' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>" +
+                        "<path fill-rule='evenodd' d='M11.502 7.013a.144.144 0 00-.202.134V8.3a.5.5 0 01-.5.5c-.667 0-2.013.005-3.3.822-.984.624-1.99 1.76-2.595 3.876 1.02-.983 2.185-1.516 3.205-1.799a8.745 8.745 0 011.921-.306 7.468 7.468 0 01.798.008h.013l.005.001h.001l-.048.498.05-.498a.5.5 0 01.45.498v1.153c0 .108.11.176.202.134l3.984-2.933a.522.522 0 01.042-.028.147.147 0 000-.252.51.51 0 01-.042-.028l-3.984-2.933zM10.3 12.386a7.745 7.745 0 00-1.923.277c-1.326.368-2.896 1.201-3.94 3.08a.5.5 0 01-.933-.305c.464-3.71 1.886-5.662 3.46-6.66 1.245-.79 2.527-.942 3.336-.971v-.66a1.144 1.144 0 011.767-.96l3.994 2.94a1.147 1.147 0 010 1.946l-3.994 2.94a1.144 1.144 0 01-1.767-.96v-.667z' clip-rule='evenodd'>" + "</path>" +
+                        "</svg>" + "<span class='retweet-count'>" + "0" + "</span>" + " " + "<a>" +
+                        "<svg class='bi bi-chat-fill' width='1em' height='1em' viewBox='0 0 20 20' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>" +
+                        " <path fill-rule='evenodd' d='M7.5 14s.65.65.117 1.948A4.821 4.821 0 017 17c.449 0 .887-.067 1.307-.181C10.692 16.169 12.5 14 12.5 14a5.5 5.5 0 100-11h-5a5.5 5.5 0 100 11z' clip-rule='evenodd'>" + "</path>" +
+                        "</svg>" + " " + "0" +
+                        " </a>" + "<a class='delete' href='#'>" +
+                        "<svg class='bi bi-x-circle-fill' width='1em' height='1em' viewBox='0 0 16 16' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>" +
+                        "<path fill-rule='evenodd' d='M16 8A8 8 0 110 8a8 8 0 0116 0zm-4.146-3.146a.5.5 0 00-.708-.708L8 7.293 4.854 4.146a.5.5 0 10-.708.708L7.293 8l-3.147 3.146a.5.5 0 00.708.708L8 8.707l3.146 3.147a.5.5 0 00.708-.708L8.707 8l3.147-3.146z' clip-rule='evenodd'>" + "</path>" +
+                        "</svg>" +
+                        " </a>";
+                }
+            });
+            }
+
+        };
+    </script>
+}

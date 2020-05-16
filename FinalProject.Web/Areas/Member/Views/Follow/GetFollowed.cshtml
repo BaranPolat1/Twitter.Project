@@ -1,0 +1,85 @@
+﻿@model IEnumerable<FinalProject.Associate.DTO.UserDTO>
+
+@{
+    ViewData["Title"] = "GetFollowed";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table" style="color:white">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody style="color:white">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.OnlineMi == true)
+                    {
+                        <a class="btn-sm btn-success rounded"></a>
+                    }
+                    else
+                    {
+                        <a class="btn-sm btn-danger rounded"></a>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bio)
+                </td>
+                <td>
+                    <a class="btn-sm btn-warning" asp-action="Profile" asp-controller="Profile" asp-route-userName="@item.UserName">Profile</a>
+                    @foreach (var item2 in item.Followed)
+                    {
+
+
+
+                        <a class="follow btn-sm btn-danger" href="@Url.Action("Follow","Follow",new {item.Id })"><b class="result">Unfollow</b></a>
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts2{
+    <script>
+        $(document).on("click", "a.follow", function (a) {
+            a.preventDefault();
+            var me = this;
+            $.post(this.href).then(function (results) {
+                $(me).find("b.result").text(results.message);
+            });
+        });
+    </script>
+
+}

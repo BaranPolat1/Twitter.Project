@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200422142506_Barros.cs" />
+    <Compile Remove="Migrations\20200422142506_Barros.Designer.cs" />
+    <Compile Remove="Migrations\20200509232831_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200509232831_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200509233113_InitalCreate.cs" />
+    <Compile Remove="Migrations\20200509233113_InitalCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200510191915_IniitalCreate.cs" />
+    <Compile Remove="Migrations\20200510191915_IniitalCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200510192037_InitalCreate.cs" />
+    <Compile Remove="Migrations\20200510192037_InitalCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200510194342_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200510194342_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200510194629_Baran.cs" />
+    <Compile Remove="Migrations\20200510194629_Baran.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FinalProject.Entities\FinalProject.Entities.csproj" />
+    <ProjectReference Include="..\FinalProject.Map\FinalProject.Map.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,76 @@
+﻿@model FinalProject.Associate.VM.UserVM
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content ">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile bg-black">
+                    @if (Model.User.ImagePath != null)
+                    {
+                        <img class="ml-4" width="170" height="150" src="~/media/user/@Url.Content(Model.User.ImagePath)">
+                    }
+                    <h3 class="profile-username text-center">@Model.User.UserName</h3>
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item bg-black">
+                            <b>Followers</b><a asp-route-UserName="@Model.User.UserName" asp-action="GetFollower" asp-controller="Follow" class="pull-right"><b class="followers">@Model.User.Followed.Count()</b></a>
+                        </li>
+                        <li class="list-group-item bg-black">
+                            <b>Following</b>  <a class="pull-right" asp-action="GetFollowed" asp-route-UserName="@Model.User.UserName" asp-controller="Follow"> <b>@Model.User.Follower.Count()</b></a>
+                        </li>
+                    </ul>
+                    @if (Model.User.UserName != User.Identity.Name)
+                    {
+                        <a class="follow btn btn-block btn-primary" href="@Url.Action("Follow","Follow",new {Model.User.Id })"><b class="result">@ViewBag.Follow</b></a>
+                        <a asp-action="ChatBox" asp-controller="Message" asp-route-UserName="@Model.User.UserName" class="btn btn-danger btn-block"><b>Message</b></a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-block btn-primary" asp-action="Edit" asp-controller="Account" asp-route-Id="@Model.User.Id"><b>Edit Profile</b></a>
+                    }
+                </div>
+            </div>
+            <div class="box box-primary">
+                <div class="box-header with-border bg-black ">
+                    <h3 class="box-title">About Me</h3>
+                </div>
+                <div class="box-body bg-black">
+                    <strong>
+                        <svg class="bi bi-calendar" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M16 2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2zM3 5.857C3 5.384 3.448 5 4 5h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H4c-.552 0-1-.384-1-.857V5.857z" clip-rule="evenodd"></path>
+                            <path fill-rule="evenodd" d="M8.5 9a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-9 3a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-9 3a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+                        </svg>Birth Date
+                    </strong>
+                    <p class="text-muted">
+                        @Model.User.BirthDate
+                    </p>
+                    <hr>
+                    <strong>
+                        <svg class="bi bi-person-fill" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M5 16s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H5zm5-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                        </svg>Bio
+                    </strong>
+                    <p class="text-muted">@Model.User.Bio</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="nav-tabs-custom">
+                <div class="tab-content bg-black">
+                    <div class="active tab-pane" id="activity">
+                        @await Html.PartialAsync("_TweetShowPartial", Model.Tweets)
+                        @await Html.PartialAsync("_RetweetShowPartial", Model.Retweets)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts2{
+
+    <script src="~/js/MyProfile.js"></script>
+}

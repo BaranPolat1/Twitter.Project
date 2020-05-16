@@ -1,0 +1,62 @@
+﻿@model IEnumerable<FinalProject.Associate.DTO.UserDTO>
+
+    @{
+    ViewData["Title"] = "OnlineFirends";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+    }
+
+    <h1>OnlineFirends</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bio)
+                </th>
+                <th>
+                    Image
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    <a class="btn-sm  btn-warning" href="@Url.Action("Profile","Profile",new {item.UserName })">Profile</a>
+                    <a class="btn-sm btn-primary" href="@Url.Action("ChatBox","Message",new {item.UserName })">Message</a>
+                </td>
+            </tr>
+}
+        </tbody>
+    </table>

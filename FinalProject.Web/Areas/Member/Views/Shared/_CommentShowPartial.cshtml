@@ -1,0 +1,26 @@
+﻿@model IEnumerable<FinalProject.Associate.DTO.CommentDTO>
+
+<div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <div id="commentShow">
+
+        </div>
+        @foreach (var item in Model)
+        {
+            <p style="color:white">
+                @item.Content
+            </p>
+
+
+            <p class="text-primary" style="text-align:right">
+                <a asp-action="Profile" asp-controller="Profile" asp-route-UserName="@item.User.UserName"><i>@item.User.UserName</i></a>
+                <i>@item.CreatedDate</i>
+                @if (User.IsInRole("Admin") || item.User.UserName == User.Identity.Name)
+                {
+                    <a asp-action="Delete" asp-controller="Comment" asp-area="Member" class="btn btn-danger" asp-route-id="@item.Id" asp-route-tweetId="@item.TweetId">Sil</a>
+                }
+
+            </p>
+        }
+    </div>
+</div>
