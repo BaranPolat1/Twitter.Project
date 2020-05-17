@@ -56,24 +56,48 @@ namespace FinalProject.Business.UnitOfWork.Concrete
             get { return _user ?? (_user = new UserRepositoryEF(db)); }
         }
 
-        public void Dispose()
-        {
-          db.Dispose();
-        }
 
-        public int SaveChange()
+        public void SaveChange()
         {
             try
             {
-                return db.SaveChanges();
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        db.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
             catch (Exception)
             {
 
-                throw;
             }
-           
         }
-
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
+
 }
+

@@ -14,6 +14,6 @@ namespace FinalProject.Business.UnitOfWork.Abstraction
         IRetweetRepository Retweet { get; }
         ITweetRepository Tweet { get; }
         IUserRepository User { get; }
-        int SaveChange();
+        void SaveChange();
     }
 }
