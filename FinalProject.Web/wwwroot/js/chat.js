@@ -5,7 +5,7 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 //Disable send button until connection is established
 //document.querySelector("#sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (user, content) {
+connection.on("ReceiveMessage", function (user, content,image) {
     //var msg = content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     //var encodedMsg = user + " says " + msg;
     //var li = document.createElement("li");
@@ -16,10 +16,12 @@ connection.on("ReceiveMessage", function (user, content) {
     var date = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
     var msg = content;
     var kullanici = user;
-    
+    var img = new Image();
+    img.src =image;
+
     document.querySelector("#messageList").innerHTML += "<li class='left clearfix'>" +
-        "<span class='chat-img pull-left'>" +
-        "<img width='40' height='40' src='~/media/user/@Url.Content(Model.User.ImagePath)'>"+
+        "<span class='chat-img pull-left'>"
+        + "<img src='"+ img.src + "' width='50' height='50'/>" +
         "</span>" +
         "<div class='chat-body clearfix' style='color: white'>" +
         " <div class='header'>" +
@@ -45,8 +47,9 @@ document.querySelector("#sendButton").addEventListener("click", function (event)
     var user = document.querySelector("#userInput").value;
     var content = document.querySelector("#messageInput").value;
     var recipientId = document.querySelector("#recipient").value;
+    var image = document.querySelector("#userImage1").src;
     
-    connection.invoke("Send", user, content, recipientId).catch(function (err) {
+    connection.invoke("Send", user, content, recipientId,image).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();

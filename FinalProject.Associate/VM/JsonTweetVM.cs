@@ -8,7 +8,6 @@ namespace FinalProject.Associate.VM
 {
    public class JsonTweetVM
     {
-        public string Tweet{ get; set; }
-        public string message { get; set; }
+       public string image { get; set; }
     }
 }

@@ -11,7 +11,6 @@ namespace FinalProject.Business.Services.Abstract
     {
         public void Delete(AppUser user);
         public void Delete(string Id);
-        
         public IList<UserDTO> GetByLike(Guid Id);
         public IList<UserDTO> GetByRetweet(Guid Id);
         public IList<UserDTO> GetFollowed(string userName);

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using FinalProject.Associate.DTO;
+using FinalProject.Associate.VM;
 using FinalProject.Business.Services.Abstract;
 using FinalProject.Business.Services.Concrete;
 using FinalProject.Business.Validation.EntitiesValidation;
@@ -35,6 +36,8 @@ namespace FinalProject.Business.DependencyResolvers
             builder.RegisterType<TweetValidation>().As<IValidator<TweetDTO>>().InstancePerLifetimeScope();
             builder.RegisterType<CommentValidation>().As<IValidator<CommentDTO>>().InstancePerLifetimeScope();
             builder.RegisterType<MessageValidation>().As<IValidator<Message>>().InstancePerLifetimeScope();
+            builder.RegisterType<LoginValidation>().As<IValidator<LoginDTO>>().InstancePerLifetimeScope();
+            builder.RegisterType<RegisterValidation>().As<IValidator<RegisterDTO>>().InstancePerLifetimeScope();
         }
     }
 }

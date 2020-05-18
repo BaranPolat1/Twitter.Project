@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -32,7 +33,9 @@ namespace FinalProject.Web.Areas.Member.Controllers
         public IActionResult ChatBox(string userName, MessageUserVm model)
         {
             var user = _userService.GetByUserName(userName);
+            var user2 = _userService.GetByUserName(User.Identity.Name);
             ViewBag.RecipientId = user.Id;
+            ViewBag.Image = Path.GetFileName(user2.ImagePath);
             model.Messages = _messageService.GetChatBox(userName, User.Identity.Name);
             model.User = _userService.GetByUserName(User.Identity.Name);
             return View(model);

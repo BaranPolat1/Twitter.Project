@@ -44,7 +44,7 @@ namespace FinalProject.Business.Services.Concrete
             Tweet tweet = _mapper.Map<Tweet>(model);
             _uow.Tweet.Add(tweet);
             _uow.SaveChange();
-            js.Tweet = content;
+            js.image = Path.GetFullPath(user.ImagePath);
 
             return js;
 
@@ -58,7 +58,7 @@ namespace FinalProject.Business.Services.Concrete
             var tweet = _uow.Tweet.GetById(Id);
             _uow.Tweet.Delete(tweet);
             _uow.SaveChange();
-            js.message = "Bu tweet silindi!";
+           
             return js;
 
         }

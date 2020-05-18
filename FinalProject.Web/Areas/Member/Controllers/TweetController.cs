@@ -23,25 +23,28 @@ namespace FinalProject.Web.Areas.Member.Controllers
         private ITweetService _tweetService;
         private IRetweetService _retweetService;
         private ICommentService _commentService;
-        public TweetController(ITweetService tweetService, IRetweetService retweetService, ICommentService commentService)
+        private IAppUserService _appUserService;
+        public TweetController(ITweetService tweetService, IRetweetService retweetService, ICommentService commentService, IAppUserService appUserService)
         {
             _tweetService = tweetService;
             _retweetService = retweetService;
             _commentService = commentService;
+            _appUserService = appUserService;
         }
         
         public IActionResult Add(TweetDTO model,string content,IFormFile file)
         {
-            _tweetService.Add(model, User.Identity.Name, content, file);
-            return new JsonResult("");
+            
+            return new JsonResult(_tweetService.Add(model, User.Identity.Name, content, file));
         }
         public IActionResult Delete(Guid Id)
         {
-          
-            return new JsonResult(_tweetService.Delete(Id));
+             return new JsonResult(_tweetService.Delete(Id));
         }
         public IActionResult Show(Guid Id)
         {
+            var user = _appUserService.GetByUserName(User.Identity.Name);
+            ViewBag.Image = Path.GetFileName(user.ImagePath);
             TweetVM model = new TweetVM();
             model.Tweet = _tweetService.Get(Id);
             model.Comments = _commentService.GetByTweet(Id);

@@ -1,11 +1,12 @@
 ﻿@model IEnumerable<FinalProject.Associate.DTO.TweetDTO>
 <div class="baran">
 </div>
-
 @foreach (var item in Model)
 {
     <div class="media text-muted pt-3" style="background-color:black">
-    <img width="40" height="40" src="~/media/user/@Url.Content(item.User.ImagePath)">
+        <div id="x">
+            <img width="40" height="40" src="~/media/user/@Url.Content(item.User.ImagePath)">
+        </div>
         <p class="media-body pb-1 mb-0 ml-2 small lh-125 border-bottom border-gray">
             <a href="@Url.Action("Profile","Profile",new {item.User.UserName})"><strong class="d-block text-gray-dark" id="userName">@item.User.UserName</strong></a>
             <a href="@Url.Action("Show","Tweet",new {item.Id })"><span class="tweet" style="color:white">@item.Content</span></a><br />
@@ -94,4 +95,4 @@
 
 
 }
-
+<img id="userImage" width="0" height="0" src="~/media/user/@Url.Content(ViewBag.Image)" style="visibility:hidden">

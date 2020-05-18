@@ -83,13 +83,14 @@ namespace FinalProject.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            dbContext.Database.EnsureCreated();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            dbContext.Database.EnsureCreated();
+            
             app.UseRouting();
-
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+          
 
             app.UseSmidge(bundle =>
             {

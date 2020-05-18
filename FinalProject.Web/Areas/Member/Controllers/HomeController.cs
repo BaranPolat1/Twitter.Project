@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,8 +29,8 @@ namespace FinalProject.Web.Areas.Member.Controllers
         }
         public IActionResult Index(TweetVM model)
         {
-
-          
+            var user = _appUserService.GetByUserName(User.Identity.Name);
+            ViewBag.Image = Path.GetFileName(user.ImagePath);
             model.Tweets = _tweetService.GetByFollowed(User.Identity.Name);
             model.Retweets = _retweetService.GetByFollowed(User.Identity.Name);
             return View(model);

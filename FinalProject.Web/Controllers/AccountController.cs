@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using FinalProject.Business.UnitOfWork.Abstraction;
-using FinalProject.DataAccess.Context;
+using FinalProject.Associate.VM;
 using FinalProject.Entities.Entity;
-using FinalProject.Web.Models.DTO;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Omu.ValueInjecter;
@@ -48,13 +42,9 @@ namespace FinalProject.Web.Controllers
             if (ModelState.IsValid)
             {
                 AppUser user = await userManager.FindByEmailAsync(login.Email);
-
-                
                 if (user != null)
                 {
-
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, login.Password, false, false);
-
                     if (result.Succeeded)
                     {
                         user.OnlineMi = true;
@@ -73,13 +63,11 @@ namespace FinalProject.Web.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDTO model)
         {
-
             if (ModelState.IsValid)
             {
                 AppUser user = new AppUser();
