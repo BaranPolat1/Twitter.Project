@@ -10,8 +10,8 @@ namespace FinalProject.Business.Services.Abstract
 {
     public interface ITweetService
     {
-        public JsonTweetVM Add(TweetDTO model,string userName,string content, IFormFile file);
-        public JsonTweetVM Delete(Guid Id);
+        public void Add(TweetDTO model,string userName,string content, IFormFile file);
+        public void Delete(Guid Id);
         public void Delete(Tweet tweet);
         public IList<TweetDTO> GetTweets();
         public IList<TweetDTO> GetByUsers(string userId);

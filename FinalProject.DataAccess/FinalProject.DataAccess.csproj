@@ -19,6 +19,26 @@
     <Compile Remove="Migrations\20200510194342_InitialCreate.Designer.cs" />
     <Compile Remove="Migrations\20200510194629_Baran.cs" />
     <Compile Remove="Migrations\20200510194629_Baran.Designer.cs" />
+    <Compile Remove="Migrations\20200518203748_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200518203748_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519014107_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200519014107_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519015528_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200519015528_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519020321_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200519020321_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519180920_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200519180920_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519210720_IniitalCreate.cs" />
+    <Compile Remove="Migrations\20200519210720_IniitalCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519211811_Baran.cs" />
+    <Compile Remove="Migrations\20200519211811_Baran.Designer.cs" />
+    <Compile Remove="Migrations\20200519213232_IniitalCreate.cs" />
+    <Compile Remove="Migrations\20200519213232_IniitalCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519214400_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200519214400_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200519224646_ArifSusam.cs" />
+    <Compile Remove="Migrations\20200519224646_ArifSusam.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +51,6 @@
   <ItemGroup>
     <ProjectReference Include="..\FinalProject.Entities\FinalProject.Entities.csproj" />
     <ProjectReference Include="..\FinalProject.Map\FinalProject.Map.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

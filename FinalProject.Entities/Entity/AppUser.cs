@@ -21,7 +21,7 @@ namespace FinalProject.Entities.Entity
         public Status Status { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-       
+        public string ConnectionId { get; set; }
         private string _imagePath = "yumurta.jpg";
         public string ImagePath { get { return _imagePath; } set { _imagePath = value; } }
 
@@ -33,6 +33,7 @@ namespace FinalProject.Entities.Entity
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Retweet> Retweets { get; set; }
+        public virtual ICollection<ChatRoomUsers> ChatRoomUsers { get; set; }
 
         [InverseProperty("FollowerUser")]
         public virtual ICollection<Follow> Follower { get; set; }

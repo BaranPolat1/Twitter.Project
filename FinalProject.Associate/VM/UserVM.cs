@@ -7,7 +7,6 @@ namespace FinalProject.Associate.VM
 {
    public class UserVM
     {
-       
         public IList<RetweetDTO> Retweets { get; set; }
         public UserDTO User { get; set; }
         public IList<TweetDTO> Tweets { get; set; }

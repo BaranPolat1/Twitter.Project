@@ -17,8 +17,10 @@ namespace FinalProject.Associate.DTO
         public string SenderId { get; set; }
         public virtual AppUser SenderUser { get; set; }
 
-      
         public string RecipientId { get; set; }
         public virtual AppUser RecipientUser { get; set; }
+
+        public Guid ChatRoomId { get; set; }
+        public virtual ChatRoom ChatRoom { get; set; }
     }
 }

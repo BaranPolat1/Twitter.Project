@@ -1,6 +1,7 @@
-﻿@model FinalProject.Associate.VM.MessageUserVm
+﻿@model FinalProject.Associate.DTO.ChatRoomDTO
+
 @{
-    ViewData["Title"] = "ChatBox";
+    ViewData["Title"] = "ChatRoom";
     Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
     var user = User.Identity.Name;
 }
@@ -15,9 +16,9 @@
             <ul id="messageList">
                 @foreach (var item in Model.Messages)
                 {
-                   <li class="left clearfix">
+                    <li class="left clearfix">
                         <span class="chat-img pull-left">
-                            <img  src="~/media/user/@Url.Content(item.SenderUser.ImagePath)" alt="User Avatar" height="50" width="50" class="img-circle  " />
+                            <img src="~/media/user/@Url.Content(item.SenderUser.ImagePath)" alt="User Avatar" height="50" width="50" class="img-circle  " />
                         </span>
                         <div class="chat-body clearfix pb-1 mb-0 ml-2" style="color:white">
                             <div class="header">
@@ -32,8 +33,8 @@
                     </li>
 
                 }
-              </ul>
-         </div>
+            </ul>
+        </div>
         <div class="panel-footer">
             <div class="input-group">
                 <input id="messageInput" type="text" class="form-control input-sm" placeholder="Type your message here...">
@@ -45,7 +46,9 @@
     </div>
 </div>
 <img src="~/media/user/@Url.Content(ViewBag.Image)" width="0" height="0" style="visibility:hidden" id="userImage1" />
+<input type="hidden" value="@Model.Id" id="groupName" />
 @section scripts2{
+
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/chat.js"></script>
 }

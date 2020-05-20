@@ -23,7 +23,6 @@ namespace FinalProject.Web.Areas.Member.Controllers
         public ProfileController(UserManager<AppUser> _userManager, IUnitOfWork _uow, IMapper _mapper, IAppUserService userService, IRetweetService retweetService, ITweetService tweetService)
         {
             _userService = userService;
-           
             _retweetService = retweetService;
             _tweetService = tweetService;
         }
@@ -39,7 +38,6 @@ namespace FinalProject.Web.Areas.Member.Controllers
             {
                 ViewBag.Follow = "Follow";
             }
-            
             UserVM model = new UserVM();
             model.Retweets = _retweetService.GetByUser(user.Id);
             model.Tweets = _tweetService.GetByUsers(user.Id);

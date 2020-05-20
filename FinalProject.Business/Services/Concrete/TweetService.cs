@@ -26,9 +26,9 @@ namespace FinalProject.Business.Services.Concrete
             _environment = environment;
             _mapper = mapper;
         }
-        public JsonTweetVM Add(TweetDTO model, string userName, string content,IFormFile file)
+        public void Add(TweetDTO model, string userName, string content,IFormFile file)
         {
-            JsonTweetVM js = new JsonTweetVM();
+          
             var user = _uow.User.Find(x => x.UserName == userName);
             model.Content = content;
             model.UserId = user.Id;
@@ -44,22 +44,19 @@ namespace FinalProject.Business.Services.Concrete
             Tweet tweet = _mapper.Map<Tweet>(model);
             _uow.Tweet.Add(tweet);
             _uow.SaveChange();
-            js.image = Path.GetFullPath(user.ImagePath);
-
-            return js;
+            
 
 
 
         }
 
-        public JsonTweetVM Delete(Guid Id)
+        public void Delete(Guid Id)
         {
-            JsonTweetVM js = new JsonTweetVM();
+           
             var tweet = _uow.Tweet.GetById(Id);
             _uow.Tweet.Delete(tweet);
             _uow.SaveChange();
-           
-            return js;
+         
 
         }
 
@@ -83,11 +80,11 @@ namespace FinalProject.Business.Services.Concrete
             List<Tweet> tweets = new List<Tweet>();
             foreach (var item in followed)
             {
-                tweets.AddRange(_uow.Tweet.FindByList(x => x.UserId == item.FollowedId).OrderByDescending(x => x.CreatedDate));
+                tweets.AddRange(_uow.Tweet.FindByList(x => x.UserId == item.FollowedId));
             }
-            tweets.AddRange(_uow.Tweet.FindByList(x => x.UserId == user.Id).OrderByDescending(x => x.CreatedDate).Take(10));
-            var tweetList = tweets.OrderByDescending(x => x.CreatedDate).ToList();
-            var model = _mapper.Map<IList<TweetDTO>>(tweetList);
+            tweets.AddRange(_uow.Tweet.FindByList(x => x.UserId == user.Id));
+            var tweetList = tweets.OrderByDescending(x => x.CreatedDate).Take(10);
+           var model = _mapper.Map<IList<TweetDTO>>(tweetList);
             return model;
         }
 

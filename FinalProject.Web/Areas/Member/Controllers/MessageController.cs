@@ -30,15 +30,13 @@ namespace FinalProject.Web.Areas.Member.Controllers
             var model = _messageService.GetOwnLastMessage(User.Identity.Name);
             return View(model);
         }
-        public IActionResult ChatBox(string userName, MessageUserVm model)
+        public IActionResult ChatRoom(string userName)
         {
             var user = _userService.GetByUserName(userName);
             var user2 = _userService.GetByUserName(User.Identity.Name);
             ViewBag.RecipientId = user.Id;
             ViewBag.Image = Path.GetFileName(user2.ImagePath);
-            model.Messages = _messageService.GetChatBox(userName, User.Identity.Name);
-            model.User = _userService.GetByUserName(User.Identity.Name);
-            return View(model);
+            return View(_messageService.GetChatRoom(User.Identity.Name,userName));
         }
 
 

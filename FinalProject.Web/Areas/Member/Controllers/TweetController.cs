@@ -34,12 +34,13 @@ namespace FinalProject.Web.Areas.Member.Controllers
         
         public IActionResult Add(TweetDTO model,string content,IFormFile file)
         {
-            
-            return new JsonResult(_tweetService.Add(model, User.Identity.Name, content, file));
+            _tweetService.Add(model, User.Identity.Name, content, file);
+            return new JsonResult("");
         }
         public IActionResult Delete(Guid Id)
         {
-             return new JsonResult(_tweetService.Delete(Id));
+            _tweetService.Delete(Id);
+            return new JsonResult("");
         }
         public IActionResult Show(Guid Id)
         {

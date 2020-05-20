@@ -8,11 +8,8 @@ namespace FinalProject.Entities.Entity
 {
     public class Message : KernelEntity
     {
-        
-       
-        public string Content { get; set; }
-        public bool OkunduMu { get; set; }
-
+         public string Content { get; set; }
+      
         [ForeignKey("SenderUser")]
         public string SenderId { get; set; }
         public virtual AppUser SenderUser { get; set; }
@@ -20,5 +17,8 @@ namespace FinalProject.Entities.Entity
         [ForeignKey("RecipientUser")]
         public string RecipientId { get; set; }
         public virtual AppUser RecipientUser { get; set; }
+
+        public Guid ChatRoomId { get; set; }
+        public virtual ChatRoom ChatRoom { get; set; }
     }
 }

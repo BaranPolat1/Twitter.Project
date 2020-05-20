@@ -30,6 +30,15 @@ namespace FinalProject.DataAccess.Context
             builder.ApplyConfiguration(new RetweetMap());
             builder.ApplyConfiguration(new MessageMap());
             builder.ApplyConfiguration(new FollowMap());
+            builder.Entity<ChatRoomUsers>(b => b.HasOne<AppUser>(navigationExpression: uf => uf.AppUser)
+           .WithMany(navigationExpression: nf => nf.ChatRoomUsers)
+           .HasForeignKey(nf => nf.UserId));
+
+            builder.Entity<ChatRoomUsers>(b => b.HasOne<ChatRoom>(navigationExpression: uf => uf.ChatRoom)
+           .WithMany(navigationExpression: nf => nf.ChatRoomUsers)
+           .HasForeignKey(nf => nf.ChatRoomId));
+
+            builder.Entity<ChatRoomUsers>(b => b.HasKey(x => new { x.UserId, x.ChatRoomId }));
 
             base.OnModelCreating(builder);
         }
@@ -41,7 +50,7 @@ namespace FinalProject.DataAccess.Context
         }
         private static string GetConnectionString()
         {
-            const string databaseName = "TwitterBlog";
+            const string databaseName = "ProjectTwitter";
 
 
             return $"Server=localhost;" +
@@ -58,52 +67,54 @@ namespace FinalProject.DataAccess.Context
         public DbSet<Tweet> Tweets { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<ChatRoom> ChatRooms { get; set; }
+        public DbSet<ChatRoomUsers> ChatRoomUsers { get; set; }
 
-        public override int SaveChanges()
-        {
-            var modifiedEntites = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified || x.State == EntityState.Added).ToList();
+        //public override int SaveChanges()
+        //{
+        //    var modifiedEntites = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified || x.State == EntityState.Added).ToList();
            
-            string compterName = Environment.MachineName;
-            var ipAddress = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
-            DateTime date = DateTime.Now;
+        //    string compterName = Environment.MachineName;
+        //    var ipAddress = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
+        //    DateTime date = DateTime.Now;
             
-            foreach (var item in modifiedEntites)
-            {
-                KernelEntity entity = item.Entity as KernelEntity;
+        //    foreach (var item in modifiedEntites)
+        //    {
+        //        KernelEntity entity = item.Entity as KernelEntity;
                
                 
-              if (item != null)
-                {
-                    switch (item.State)
-                    {
-                        case EntityState.Modified:
+        //      if (item != null)
+        //        {
+        //            switch (item.State)
+        //            {
+        //                case EntityState.Modified:
                             
-                            entity.Status = Kernel.Enum.Status.Modified;
-                            entity.ModifiedComputerName = compterName;
-                            entity.ModifiedIP = ipAddress;
-                            entity.ModifiedDate = date;
+        //                    entity.Status = Kernel.Enum.Status.Modified;
+        //                    entity.ModifiedComputerName = compterName;
+        //                    entity.ModifiedIP = ipAddress;
+        //                    entity.ModifiedDate = date;
                          
-                            break;
-                        case EntityState.Added:
+        //                    break;
+        //                case EntityState.Added:
                         
-                            entity.Status = Kernel.Enum.Status.Active;
-                            entity.CreatedComputerName = compterName;
-                            entity.CreatedIP = ipAddress;
-                            entity.CreatedDate = date;
+        //                    entity.Status = Kernel.Enum.Status.Active;
+        //                    entity.CreatedComputerName = compterName;
+        //                    entity.CreatedIP = ipAddress;
+        //                    entity.CreatedDate = date;
                           
-                            break;
-                        case EntityState.Deleted:
-                             entity.Status = Kernel.Enum.Status.Passive;
-                            entity.CreatedComputerName = compterName;
-                            entity.CreatedIP = ipAddress;
-                            entity.CreatedDate = date;
-                            break;
+        //                    break;
+        //                case EntityState.Deleted:
+        //                     entity.Status = Kernel.Enum.Status.Passive;
+        //                    entity.CreatedComputerName = compterName;
+        //                    entity.CreatedIP = ipAddress;
+        //                    entity.CreatedDate = date;
+        //                    break;
 
-                    }
-                }
-            }
+        //            }
+        //        }
+        //    }
 
-            return base.SaveChanges();
-        }
+        //    return base.SaveChanges();
+        //}
     }
 }

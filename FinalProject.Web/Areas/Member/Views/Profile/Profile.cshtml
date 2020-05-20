@@ -26,7 +26,7 @@
                     @if (Model.User.UserName != User.Identity.Name)
                     {
                         <a class="follow btn btn-block btn-primary" href="@Url.Action("Follow","Follow",new {Model.User.Id })"><b class="result">@ViewBag.Follow</b></a>
-                        <a asp-action="ChatBox" asp-controller="Message" asp-route-UserName="@Model.User.UserName" class="btn btn-danger btn-block"><b>Message</b></a>
+                        <a id="groupChat" asp-action="ChatRoom" asp-controller="Message" asp-route-UserName="@Model.User.UserName" class="btn btn-danger btn-block"><b>Message</b></a>
                     }
                     else
                     {
@@ -73,4 +73,7 @@
 @section scripts2{
 
     <script src="~/js/MyProfile.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+  
 }

@@ -15,8 +15,7 @@ namespace FinalProject.Web.Controllers
    
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
-
-        public AccountController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager, IMapper _mapper)
+       public AccountController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager, IMapper _mapper)
         {
            
             userManager = _userManager;

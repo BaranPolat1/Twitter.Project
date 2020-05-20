@@ -55,8 +55,17 @@ namespace FinalProject.Business.UnitOfWork.Concrete
         {
             get { return _user ?? (_user = new UserRepositoryEF(db)); }
         }
+        private IChatRoomUsersRepository _chatRoomUsers;
+        public IChatRoomUsersRepository ChatRoomUsers
+        {
+            get { return _chatRoomUsers ?? (_chatRoomUsers = new ChatRoomUsersRepositoryEF(db)); }
+        }
+        private IChatRoomRepository _chatRoom;
+        public IChatRoomRepository ChatRoom
+        {
+            get { return _chatRoom?? (_chatRoom = new ChatRoomRepositoryEF(db)); }
 
-
+        }
         public void SaveChange()
         {
             try
@@ -96,7 +105,7 @@ namespace FinalProject.Business.UnitOfWork.Concrete
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
+         }
     }
 
 }

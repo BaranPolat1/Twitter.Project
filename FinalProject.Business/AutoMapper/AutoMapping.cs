@@ -18,10 +18,7 @@ namespace FinalProject.Business.AutoMapper
             CreateMap<Like, LikeDTO>().ReverseMap();
             CreateMap<Message, MessageDTO>().ReverseMap();
             CreateMap<Retweet, RetweetDTO>().ReverseMap();
-           
-          
-
-
+            CreateMap<ChatRoom, ChatRoomDTO>().ReverseMap();
         }
     }
 }

@@ -25,6 +25,8 @@ namespace FinalProject.Business.DependencyResolvers
             builder.RegisterType<MessageService>().As<IMessageService>().InstancePerLifetimeScope();
             builder.RegisterType<UnitOfWork.Concrete.UnitOfWork>().As<UnitOfWork.Abstraction.IUnitOfWork>().InstancePerLifetimeScope();
             builder.RegisterType<UserRepositoryEF>().As<IUserRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<ChatRoomUsersRepositoryEF>().As<IChatRoomUsersRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<ChatRoomRepositoryEF>().As<IChatRoomRepository>().InstancePerLifetimeScope();
             builder.RegisterType<CommentRepositoryEF>().As<ICommentRepository>().InstancePerLifetimeScope();
             builder.RegisterType<FollowRepositoeyEF>().As<IFollowRepository>().InstancePerLifetimeScope();
             builder.RegisterType<LikeRepositoryEF>().As<ILikeRepository>().InstancePerLifetimeScope();
