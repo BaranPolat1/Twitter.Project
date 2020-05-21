@@ -26,37 +26,24 @@ namespace FinalProject.Business.Services.Concrete
             _environment = environment;
             _mapper = mapper;
         }
-        public void Add(TweetDTO model, string userName, string content,IFormFile file)
+        public void Add(TweetDTO model, string userName, string content, IFormFile image)
         {
-          
             var user = _uow.User.Find(x => x.UserName == userName);
             model.Content = content;
             model.UserId = user.Id;
-            if (model.ImageUpload != null)
-            {
-                string uploadDir = Path.Combine(_environment.WebRootPath, "media/tweet");
-                model.ImagePath = Guid.NewGuid().ToString() + "_" + model.ImageUpload.FileName;
-                string filePath = Path.Combine(uploadDir, model.ImagePath);
-                FileStream fs = new FileStream(filePath, FileMode.Create);
-                model.ImageUpload.CopyToAsync(fs);
-                fs.Close();
-            }
+            model.ImagePath = image.FileName;
             Tweet tweet = _mapper.Map<Tweet>(model);
             _uow.Tweet.Add(tweet);
             _uow.SaveChange();
-            
-
-
-
         }
 
         public void Delete(Guid Id)
         {
-           
+
             var tweet = _uow.Tweet.GetById(Id);
             _uow.Tweet.Delete(tweet);
             _uow.SaveChange();
-         
+
 
         }
 
@@ -84,7 +71,7 @@ namespace FinalProject.Business.Services.Concrete
             }
             tweets.AddRange(_uow.Tweet.FindByList(x => x.UserId == user.Id));
             var tweetList = tweets.OrderByDescending(x => x.CreatedDate).Take(10);
-           var model = _mapper.Map<IList<TweetDTO>>(tweetList);
+            var model = _mapper.Map<IList<TweetDTO>>(tweetList);
             return model;
         }
 

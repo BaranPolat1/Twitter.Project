@@ -18,6 +18,6 @@ namespace FinalProject.Entities.Entity
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Retweet> Retweets { get; set; }
-        public virtual ICollection<Image> Images { get; set; }
+      
     }
 }

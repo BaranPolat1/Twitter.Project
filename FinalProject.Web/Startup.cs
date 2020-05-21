@@ -7,12 +7,14 @@ using Castle.Core.Logging;
 using FinalProject.Business.AutoMapper;
 using FinalProject.Business.UnitOfWork.Abstraction;
 using FinalProject.Business.UnitOfWork.Concrete;
+using FinalProject.Business.Validation.ValidationFilter;
 using FinalProject.DataAccess.Context;
 using FinalProject.DataAccess.Repository.Abstraction;
 using FinalProject.DataAccess.Repository.Concrete;
 using FinalProject.Entities.Entity;
 using FinalProject.Web.Areas.Member.Controllers;
 using FinalProject.Web.Hubs;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,15 +42,15 @@ namespace FinalProject.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            //===== AutoMapper =====
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new AutoMapping());
             });
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddMvc();
             services.AddAutoMapper(typeof(Startup));
+
             services.AddControllersWithViews();
             services.AddDbContext<ProjectContext>();
 
@@ -57,8 +59,13 @@ namespace FinalProject.Web
                 .AddEntityFrameworkStores<ProjectContext>()
                 .AddDefaultTokenProviders();
             services.AddRazorPages();
-            services.AddMvc(options => { options.EnableEndpointRouting = false; }) ;
+
+            //=====Fluent Validation =======
+            services.AddMvc(options => { options.Filters.Add<ValidationFilter>(); options.EnableEndpointRouting = false; })
+               .AddFluentValidation(opt => { opt.RegisterValidatorsFromAssemblyContaining<Startup>(); });
             services.AddSignalR();
+        
+            //===== Google Authentication ======
             services.AddAuthentication()
                 .AddGoogle(x =>
                 {
@@ -91,7 +98,7 @@ namespace FinalProject.Web
             app.UseAuthentication();
             app.UseAuthorization();
           
-
+            //===== Bundle =====
             app.UseSmidge(bundle =>
             {
               

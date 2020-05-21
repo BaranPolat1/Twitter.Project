@@ -30,7 +30,10 @@ namespace FinalProject.Web.Areas.Member.Controllers
             {
                 users = users.Where(s => s.UserName.Contains(userName));
             }
-           
+            else
+            {
+                ModelState.AddModelError("", "Kullanıcı bulunamadı");
+            }
             var model = mapper.Map<List<UserDTO>>(users);
             TempData["UserName"] = userName;
             return View(model);

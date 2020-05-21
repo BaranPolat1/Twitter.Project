@@ -22,8 +22,9 @@ namespace FinalProject.Associate.DTO
         public DateTime? BirthDate { get; set; }
         public virtual ICollection<Follow> Follower { get; set; }
         public virtual ICollection<Follow> Followed { get; set; }
-      
-      
+     
+
+
 
 
 

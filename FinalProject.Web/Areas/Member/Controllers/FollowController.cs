@@ -10,6 +10,7 @@ using FinalProject.Business.UnitOfWork.Abstraction;
 using FinalProject.Entities.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace FinalProject.Web.Areas.Member.Controllers
 {
@@ -29,9 +30,9 @@ namespace FinalProject.Web.Areas.Member.Controllers
             return new JsonResult(_followService.Follow(Id, User.Identity.Name));
         }
 
-        public IActionResult GetFollower(string userName)
+        public IActionResult GetFollower(string userName,int sayfa=1)
         {
-            var model = _appUserService.GetFollower(userName);
+            var model = _appUserService.GetFollower(userName).ToPagedList(sayfa,15);
             foreach (var item in model)
             {
                 var result = _appUserService.TakipEdiyorMu(item.UserName, User.Identity.Name);
@@ -46,9 +47,10 @@ namespace FinalProject.Web.Areas.Member.Controllers
             }
             return View(model);
         }
-        public IActionResult GetFollowed(string userName)
+        public IActionResult GetFollowed(string userName,int sayfa =1)
         {
-            return View(_appUserService.GetFollowed(userName));
+            var model = _appUserService.GetFollowed(userName).ToPagedList(sayfa, 15);
+            return View(model);
         }
     }
 }

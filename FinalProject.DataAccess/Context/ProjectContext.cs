@@ -14,12 +14,21 @@ namespace FinalProject.DataAccess.Context
 {
     public class ProjectContext : IdentityDbContext<AppUser>
     {
-        private IHttpContextAccessor _accessor;
-
-        public ProjectContext(DbContextOptions<ProjectContext> options, IHttpContextAccessor accessor) : base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            _accessor = accessor;
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.UseLazyLoadingProxies();
+            optionsBuilder.UseSqlServer(GetConnectionString());
+        }
+        private static string GetConnectionString()
+        {
+            const string databaseName = "ProjectTwitter";
 
+            return $"Server=localhost;" +
+                   $"database={databaseName};" +
+                   $"Trusted_Connection = True;" +
+                   $"MultipleActiveResultSets = True;" +
+                    $"pooling=true;";
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -30,6 +39,7 @@ namespace FinalProject.DataAccess.Context
             builder.ApplyConfiguration(new RetweetMap());
             builder.ApplyConfiguration(new MessageMap());
             builder.ApplyConfiguration(new FollowMap());
+
             builder.Entity<ChatRoomUsers>(b => b.HasOne<AppUser>(navigationExpression: uf => uf.AppUser)
            .WithMany(navigationExpression: nf => nf.ChatRoomUsers)
            .HasForeignKey(nf => nf.UserId));
@@ -42,23 +52,7 @@ namespace FinalProject.DataAccess.Context
 
             base.OnModelCreating(builder);
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseLazyLoadingProxies();
-            optionsBuilder.UseSqlServer(GetConnectionString());
-        }
-        private static string GetConnectionString()
-        {
-            const string databaseName = "ProjectTwitter";
-
-
-            return $"Server=localhost;" +
-                   $"database={databaseName};" +
-                   $"Trusted_Connection = True;" +
-                   $"MultipleActiveResultSets = True;" +
-                    $"pooling=true;";
-        }
+        
 
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Follow> Follows { get; set; }
@@ -66,55 +60,9 @@ namespace FinalProject.DataAccess.Context
         public DbSet<Retweet> Retweets { get; set; }
         public DbSet<Tweet> Tweets { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<Image> Images { get; set; }
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<ChatRoomUsers> ChatRoomUsers { get; set; }
 
-        //public override int SaveChanges()
-        //{
-        //    var modifiedEntites = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified || x.State == EntityState.Added).ToList();
-           
-        //    string compterName = Environment.MachineName;
-        //    var ipAddress = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
-        //    DateTime date = DateTime.Now;
-            
-        //    foreach (var item in modifiedEntites)
-        //    {
-        //        KernelEntity entity = item.Entity as KernelEntity;
-               
-                
-        //      if (item != null)
-        //        {
-        //            switch (item.State)
-        //            {
-        //                case EntityState.Modified:
-                            
-        //                    entity.Status = Kernel.Enum.Status.Modified;
-        //                    entity.ModifiedComputerName = compterName;
-        //                    entity.ModifiedIP = ipAddress;
-        //                    entity.ModifiedDate = date;
-                         
-        //                    break;
-        //                case EntityState.Added:
-                        
-        //                    entity.Status = Kernel.Enum.Status.Active;
-        //                    entity.CreatedComputerName = compterName;
-        //                    entity.CreatedIP = ipAddress;
-        //                    entity.CreatedDate = date;
-                          
-        //                    break;
-        //                case EntityState.Deleted:
-        //                     entity.Status = Kernel.Enum.Status.Passive;
-        //                    entity.CreatedComputerName = compterName;
-        //                    entity.CreatedIP = ipAddress;
-        //                    entity.CreatedDate = date;
-        //                    break;
-
-        //            }
-        //        }
-        //    }
-
-        //    return base.SaveChanges();
-        //}
+        
     }
 }

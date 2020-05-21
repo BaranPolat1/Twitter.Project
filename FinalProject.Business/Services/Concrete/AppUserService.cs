@@ -35,9 +35,6 @@ namespace FinalProject.Business.Services.Concrete
             _uow.User.Delete(user);
             _uow.SaveChange();
         }
-
-        
-
         public UserDTO GetById(string Id)
         {
             var user = _uow.User.Find(x=>x.Id == Id);
@@ -72,7 +69,7 @@ namespace FinalProject.Business.Services.Concrete
             var model = _mapper.Map<List<UserDTO>>(appUsers);
             return model;
         }
-
+ 
         public UserDTO GetByUserName(string userName)
         {
             var user = _uow.User.Find(x => x.UserName == userName);

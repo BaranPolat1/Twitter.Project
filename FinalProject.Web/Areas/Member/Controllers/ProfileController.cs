@@ -20,7 +20,7 @@ namespace FinalProject.Web.Areas.Member.Controllers
         private IAppUserService _userService;
         private IRetweetService _retweetService;
         private ITweetService _tweetService;
-        public ProfileController(UserManager<AppUser> _userManager, IUnitOfWork _uow, IMapper _mapper, IAppUserService userService, IRetweetService retweetService, ITweetService tweetService)
+        public ProfileController(IAppUserService userService, IRetweetService retweetService, ITweetService tweetService)
         {
             _userService = userService;
             _retweetService = retweetService;

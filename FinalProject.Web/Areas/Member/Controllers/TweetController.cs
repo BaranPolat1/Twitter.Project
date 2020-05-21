@@ -19,7 +19,6 @@ namespace FinalProject.Web.Areas.Member.Controllers
     [Area("Member")]
     public class TweetController : Controller
     {
-       
         private ITweetService _tweetService;
         private IRetweetService _retweetService;
         private ICommentService _commentService;
@@ -32,9 +31,9 @@ namespace FinalProject.Web.Areas.Member.Controllers
             _appUserService = appUserService;
         }
         
-        public IActionResult Add(TweetDTO model,string content,IFormFile file)
+        public IActionResult Add(TweetDTO model,string content,IFormFile image)
         {
-            _tweetService.Add(model, User.Identity.Name, content, file);
+            _tweetService.Add(model, User.Identity.Name,content,image);
             return new JsonResult("");
         }
         public IActionResult Delete(Guid Id)

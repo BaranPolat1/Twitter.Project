@@ -39,6 +39,8 @@
     <Compile Remove="Migrations\20200519214400_InitialCreate.Designer.cs" />
     <Compile Remove="Migrations\20200519224646_ArifSusam.cs" />
     <Compile Remove="Migrations\20200519224646_ArifSusam.Designer.cs" />
+    <Compile Remove="Migrations\20200519225242_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200519225242_InitialCreate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +53,10 @@
   <ItemGroup>
     <ProjectReference Include="..\FinalProject.Entities\FinalProject.Entities.csproj" />
     <ProjectReference Include="..\FinalProject.Map\FinalProject.Map.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

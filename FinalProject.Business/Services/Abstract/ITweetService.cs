@@ -10,7 +10,7 @@ namespace FinalProject.Business.Services.Abstract
 {
     public interface ITweetService
     {
-        public void Add(TweetDTO model,string userName,string content, IFormFile file);
+        public void Add(TweetDTO model, string userName, string content, IFormFile image);
         public void Delete(Guid Id);
         public void Delete(Tweet tweet);
         public IList<TweetDTO> GetTweets();

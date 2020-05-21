@@ -1,4 +1,7 @@
-﻿@model IEnumerable<FinalProject.Associate.DTO.UserDTO>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Common;
+@model IPagedList<FinalProject.Associate.DTO.UserDTO>
 
 @{
     ViewData["Title"] = "GetFollowed";
@@ -10,19 +13,19 @@
         <tr>
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => model.First().UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.First().FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.First().LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.First().Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bio)
+                @Html.DisplayNameFor(model => model.First().Bio)
             </th>
             <th></th>
         </tr>
@@ -58,19 +61,22 @@
                 </td>
                 <td>
                     <a class="btn-sm btn-warning" asp-action="Profile" asp-controller="Profile" asp-route-userName="@item.UserName">Profile</a>
+                    <a class="btn-sm btn-primary" asp-action="ChatRoom" asp-controller="Message" asp-route-userName="@item.UserName">Message</a>
                     @foreach (var item2 in item.Followed)
                     {
-
-
-
                         <a class="follow btn-sm btn-danger" href="@Url.Action("Follow","Follow",new {item.Id })"><b class="result">Unfollow</b></a>
-
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+@Html.PagedListPager((IPagedList)Model, sayfa => Url.Action("GetFollowed","Follow", new { sayfa }), new X.PagedList.Web.Common.PagedListRenderOptionsBase
+{
+    LiElementClasses = new string[] { "page item" },
+     PageClasses = new string[] { "page-link" },
+     Display = X.PagedList.Web.Common.PagedListDisplayMode.IfNeeded
+})
 @section scripts2{
     <script>
         $(document).on("click", "a.follow", function (a) {

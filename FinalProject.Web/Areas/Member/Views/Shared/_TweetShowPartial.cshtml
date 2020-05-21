@@ -10,6 +10,11 @@
         <p class="media-body pb-1 mb-0 ml-2 small lh-125 border-bottom border-gray">
             <a href="@Url.Action("Profile","Profile",new {item.User.UserName})"><strong class="d-block text-gray-dark" id="userName">@item.User.UserName</strong></a>
             <a href="@Url.Action("Show","Tweet",new {item.Id })"><span class="tweet" style="color:white">@item.Content</span></a><br />
+            @if (item.ImagePath != null)
+            {
+                <img src="@Url.Content(item.ImagePath)"  height="100" width="100"/><br />
+            }
+
             @if (item.Likes.Count > 0)
             {
                 @foreach (var item2 in item.Likes)
@@ -90,7 +95,7 @@
             }
 
 
-    </div>
+</div>
 
 
 
