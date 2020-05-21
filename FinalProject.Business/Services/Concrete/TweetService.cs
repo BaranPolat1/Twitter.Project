@@ -31,7 +31,20 @@ namespace FinalProject.Business.Services.Concrete
             var user = _uow.User.Find(x => x.UserName == userName);
             model.Content = content;
             model.UserId = user.Id;
-            model.ImagePath = image.FileName;
+            if (image != null)
+            {
+                string uploadDir = Path.Combine(_environment.WebRootPath, "media/tweet");
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
+                string fileName = Path.GetFileName(image.FileName);
+                using (FileStream stream = new FileStream(Path.Combine(uploadDir, fileName), FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                    model.ImagePath = fileName;
+                }
+            }
             Tweet tweet = _mapper.Map<Tweet>(model);
             _uow.Tweet.Add(tweet);
             _uow.SaveChange();

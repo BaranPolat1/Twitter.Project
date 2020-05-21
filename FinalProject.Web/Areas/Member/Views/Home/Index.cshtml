@@ -45,12 +45,17 @@
                 alert("Bu alan boş geçilemez!");
             }
             else {
+                var file = document.querySelector("#myFile").files[0];
+                let formData = new FormData();
+                formData.append("content", content);
+                formData.append("image",file)
                  var username = '@User.Identity.Name';
                 $.ajax({
-                   dataType: 'JSON',
-                data: { "content": content},
-                type: 'POST',
-                url: "/Member/Tweet/Add",
+               url:'/Member/Tweet/Add',
+               data: formData,
+               type: 'POST',
+               processData: false,
+               contentType: false,
                         success: function () {
                         var myImage = document.querySelector("#myImg").src;
                         var image2 = "";
@@ -81,7 +86,7 @@
             }
 
         };
-      
+
 
 
     </script>

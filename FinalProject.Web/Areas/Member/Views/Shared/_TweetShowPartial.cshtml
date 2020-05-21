@@ -12,7 +12,7 @@
             <a href="@Url.Action("Show","Tweet",new {item.Id })"><span class="tweet" style="color:white">@item.Content</span></a><br />
             @if (item.ImagePath != null)
             {
-                <img src="@Url.Content(item.ImagePath)"  height="100" width="100"/><br />
+                <img src="~/media/tweet/@Url.Content(item.ImagePath)"  height="100" width="100"/><br />
             }
 
             @if (item.Likes.Count > 0)
