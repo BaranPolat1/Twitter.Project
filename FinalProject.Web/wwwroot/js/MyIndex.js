@@ -18,7 +18,20 @@ $(document).on("click", "a.retweet", function (a) {
 $(document).on("click", "a.delete", function (e) {
     e.preventDefault();
     var de = this;
+   
     $.post(this.href).then(function (result) {
-        $(de).find("span.contentTweet").text(result.message);
+        $(de).css({ "visibility": "hidden" });
+    });
+});
+window.addEventListener('load', function () {
+    document.querySelector('input[type="file"]').addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            $("#myImg").css({ "visibility": "visible" });
+            var img = document.querySelector('#myImg');
+            img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+            img.height = "100";
+            img.width = "100";
+            img.onload = imageIsLoaded;
+        }
     });
 });

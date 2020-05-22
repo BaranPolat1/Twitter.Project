@@ -22,21 +22,21 @@ namespace FinalProject.Web.Hubs
             _userService = userService;
             _db = db;
         }
-        public void Send(string user, string content, string recipientId, string image,Guid group)
+        public async Task Send(string user, string content, string recipientId, string image, Guid group)
         {
             var user1 = _userService.GetByUserName(Context.User.Identity.Name);
-            Groups.AddToGroupAsync(Context.ConnectionId, group.ToString());
+            await Groups.AddToGroupAsync(Context.ConnectionId, group.ToString());
             Message message = new Message
             {
                 Content = content,
                 RecipientId = recipientId,
                 SenderId = user1.Id,
                 ChatRoomId = group
-                
+
             };
             _db.Message.Add(message);
             _db.SaveChange();
-            Clients.Group(group.ToString()).SendAsync("ReceiveMessage", user, content, image);
+            await Clients.Group(group.ToString()).SendAsync("ReceiveMessage", user, content, image);
         }
     }
 }

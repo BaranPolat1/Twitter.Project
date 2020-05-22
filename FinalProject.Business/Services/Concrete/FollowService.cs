@@ -21,22 +21,43 @@ namespace FinalProject.Business.Services.Concrete
             if (_uow.Follow.Any(x => x.FollowerId == user2.Id && x.FollowedId == user.Id))
             {
                 Follow follow = _uow.Follow.Find(x => x.FollowerId == user2.Id && x.FollowedId == user.Id);
-                _uow.Follow.Delete(follow);
-                _uow.SaveChange();
-                js.message = "Follow";
-                js.follow = _uow.Follow.FindByList(x => x.FollowedId == Id).Count;
+                if (follow != null)
+                {
+                    _uow.Follow.Delete(follow);
+                    _uow.SaveChange();
+                    js.message = "Follow";
+                    js.follow = _uow.Follow.FindByList(x => x.FollowedId == Id).Count;
+                }
+                else
+                {
+                    js.message = "Böyle bir kullanıcı yok!";
+                    js.follow = 0;
+                }
+                
                 return js;
             }
             else
             {
-                Follow follow = new Follow();
-                follow.FollowedId = user.Id;
-                follow.FollowerId = user2.Id;
-                _uow.Follow.Add(follow);
-                _uow.SaveChange();
-                js.message = "UnFollow";
-                js.follow = _uow.Follow.FindByList(x => x.FollowedId == Id).Count;
-                return js;
+                try
+                {
+                    Follow follow = new Follow();
+                    follow.FollowedId = user.Id;
+                    follow.FollowerId = user2.Id;
+                    _uow.Follow.Add(follow);
+                    _uow.SaveChange();
+                    js.message = "UnFollow";
+                    js.follow = _uow.Follow.FindByList(x => x.FollowedId == Id).Count;
+                    return js;
+                }
+                catch 
+                {
+
+                    js.message = "böyle bir kullanıcı yok!";
+                    js.follow = 0;
+                    return js;
+                }
+                   
+                
             }
         }
     }

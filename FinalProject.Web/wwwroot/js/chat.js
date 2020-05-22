@@ -11,11 +11,11 @@ connection.on("ReceiveMessage", function (user, content, image) {
     var msg = content;
     var kullanici = user;
     var img = new Image();
-    img.src =image;
+    img.src = image;
 
     document.querySelector("#messageList").innerHTML += "<li class='left clearfix'>" +
         "<span class='chat-img pull-left'>"
-        + "<img src='"+ img.src + "' width='50' height='50'/>" +
+        + "<img src='" + img.src + "' width='50' height='50'/>" +
         "</span>" +
         "<div class='chat-body clearfix' style='color: white'>" +
         " <div class='header'>" +
@@ -33,8 +33,8 @@ connection.on("ReceiveMessage", function (user, content, image) {
 });
 
 connection.start().then(function () {
-    document.querySelector("#sendButton").disabled = false;
-   }).catch(function (err) {
+    document.getElementById("sendButton").disabled = false;
+}).catch(function (err) {
     return console.error(err.toString());
 });
 

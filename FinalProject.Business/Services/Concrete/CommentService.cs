@@ -22,27 +22,44 @@ namespace FinalProject.Business.Services.Concrete
         }
         public void Add(CommentDTO model, string content, string userName, Guid tweetId)
         {
-            Comment comment = new Comment();
-            var user = _uow.User.Find(x=>x.UserName == userName);
-            model.Content = content;
-            model.UserId = user.Id;
-            model.TweetId = tweetId;
-            comment.InjectFrom(model);
-            _uow.Comment.Add(comment);
-            _uow.SaveChange();
+            try
+            {
+                Comment comment = new Comment();
+                var user = _uow.User.Find(x => x.UserName == userName);
+                model.Content = content;
+                model.UserId = user.Id;
+                model.TweetId = tweetId;
+                comment.InjectFrom(model);
+                _uow.Comment.Add(comment);
+                _uow.SaveChange();
+            }
+            catch
+            {
+
+               
+            }
+           
         }
 
         public void Delete(Comment comment)
         {
-            _uow.Comment.Delete(comment);
-            _uow.SaveChange();
+            if (comment != null)
+            {
+                _uow.Comment.Delete(comment);
+                _uow.SaveChange();
+            }
+            
         }
 
         public void Delete(Guid Id)
         {
             var comment = _uow.Comment.GetById(Id);
-            _uow.Comment.Delete(comment);
-            _uow.SaveChange();
+            if (comment!= null)
+            {
+                _uow.Comment.Delete(comment);
+                _uow.SaveChange();
+            }
+         
         }
 
         public CommentDTO Get(Guid Id)

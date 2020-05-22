@@ -67,9 +67,17 @@ namespace FinalProject.Business.Services.Concrete
             else
             {
                 Retweet retweet = _uow.Retweet.Find(x => x.TweetId == tweet.Id && x.UserId == user.Id);
-                _uow.Retweet.Delete(retweet);
-                _uow.SaveChange();
-                js.retweets = _uow.Retweet.FindByList(x => x.TweetId == tweet.Id).Count();
+                if (retweet != null)
+                {
+                    _uow.Retweet.Delete(retweet);
+                    _uow.SaveChange();
+                    js.retweets = _uow.Retweet.FindByList(x => x.TweetId == tweet.Id).Count();
+                  
+                }
+                else
+                {
+                    js.retweets = 0;
+                }
                 return js;
             }
         }

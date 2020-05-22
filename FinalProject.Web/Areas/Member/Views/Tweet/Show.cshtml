@@ -10,7 +10,7 @@
             <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 @if (Model.Tweet.ImagePath != null)
                 {
-                    <img src="~/media/tweet/@Url.Content(Model.Tweet.ImagePath)">
+                    <img src="~/media/tweet/@Url.Content(Model.Tweet.ImagePath)" height="200" width="200">
                 }
             </p>
             <div class="card-body mt-0">

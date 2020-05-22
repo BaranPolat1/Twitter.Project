@@ -4,29 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Baran Blog</title>
-
    <link rel="stylesheet" href="cssbundle" />
-
    </head>
 <body style="background-color:black">
     <header>
         @await Html.PartialAsync("_MemberNavBarPartial")
     </header>
-    
-        <main role="main" class="ml-5 mt-0" >
-            <div class="row mt-0">
-
-                @await Html.PartialAsync("_MemberSideBarPartial")
-
-                <div class="col-md-9 mt-0">
-                    @RenderBody()
-                </div>
+    <main role="main" class="ml-5 mt-0">
+        <div class="row mt-0">
+            @await Html.PartialAsync("_MemberSideBarPartial")
+            <div class="col-md-9 mt-0">
+                @RenderBody()
             </div>
-
-        </main>
+        </div>
+    </main>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/jquery.min.js"></script>
-    <script src="~/js/jquery.form.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("scripts2", false)
 

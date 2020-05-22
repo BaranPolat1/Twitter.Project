@@ -146,7 +146,6 @@ namespace FinalProject.Business.Services.Concrete
             IList<MessageDTO> model = _mapper.Map<IList<MessageDTO>>(messages);
             return model;
         }
-
         public bool OkunduMu(string userName)
         {
             var messages = GetOwnLastMessage(userName);

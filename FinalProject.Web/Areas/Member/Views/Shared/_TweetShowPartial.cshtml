@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<FinalProject.Associate.DTO.TweetDTO>
 <div class="baran">
 </div>
+
 @foreach (var item in Model)
 {
-    <div class="media text-muted pt-3" style="background-color:black">
+    <div class="media text-muted pt-3 acilar" style="background-color:black">
         <div id="x">
             <img width="40" height="40" src="~/media/user/@Url.Content(item.User.ImagePath)">
         </div>
@@ -12,7 +13,7 @@
             <a href="@Url.Action("Show","Tweet",new {item.Id })"><span class="tweet" style="color:white">@item.Content</span></a><br />
             @if (item.ImagePath != null)
             {
-                <img src="~/media/tweet/@Url.Content(item.ImagePath)"  height="100" width="100"/><br />
+                <img src="~/media/tweet/@Url.Content(item.ImagePath)" height="100" width="100" /><br />
             }
 
             @if (item.Likes.Count > 0)
@@ -95,9 +96,6 @@
             }
 
 
-</div>
-
-
-
+    </div>
 }
 <img id="userImage" width="0" height="0" src="~/media/user/@Url.Content(ViewBag.Image)" style="visibility:hidden">

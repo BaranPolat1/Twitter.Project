@@ -50,8 +50,7 @@ namespace FinalProject.Web.Areas.Member.Controllers
 
             if (ModelState.IsValid)
             {
-                user.InjectFrom<FilterId>(model);
-         
+              
                 if (model.ImageUpload != null)
                 {
                     string uploadDir = Path.Combine(webHostEnvironment.WebRootPath, "media/user");
@@ -61,8 +60,14 @@ namespace FinalProject.Web.Areas.Member.Controllers
                         FileStream fs = new FileStream(filePath, FileMode.Create);
                         await model.ImageUpload.CopyToAsync(fs);
                         fs.Close();
+                    user.InjectFrom<FilterId>(model);
                 }
-                user.ImagePath = model.ImagePath;
+                else
+                {
+
+                }
+              
+
                 if (model.Password != null)
                 {
                     user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);

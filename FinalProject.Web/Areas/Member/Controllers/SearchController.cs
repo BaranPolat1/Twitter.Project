@@ -7,6 +7,7 @@ using FinalProject.Associate.DTO;
 using FinalProject.Business.UnitOfWork.Abstraction;
 using FinalProject.DataAccess.Context;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace FinalProject.Web.Areas.Member.Controllers
 {
@@ -14,8 +15,8 @@ namespace FinalProject.Web.Areas.Member.Controllers
     public class SearchController : Controller
     {
         private IMapper mapper;
-        private ProjectContext _db;
-        public SearchController(ProjectContext db, IMapper _mapper)
+        private IUnitOfWork _db;
+        public SearchController(IUnitOfWork db, IMapper _mapper)
         {
 
             _db = db;
@@ -24,7 +25,7 @@ namespace FinalProject.Web.Areas.Member.Controllers
 
         public IActionResult SearchUser(string userName)
         {
-            var users = from u in _db.Users
+            var users = from u in _db.User.GetAll()
                         select u;
             if (!String.IsNullOrEmpty(userName))
             {

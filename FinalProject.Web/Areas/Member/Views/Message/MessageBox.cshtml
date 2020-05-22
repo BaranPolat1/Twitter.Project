@@ -53,11 +53,11 @@
                                     <td>
                                         @if (User.Identity.Name == item.SenderUser.UserName)
                                         {
-                                            <a class="btn-sm btn-warning" asp-action="ChatRoom" asp-route-userName="@item.RecipientUser.UserName">Details</a>
+                                            <a class="chatRoom btn-sm btn-warning" asp-action="ChatRoom" asp-route-userName="@item.RecipientUser.UserName">Details</a>
                                         }
                                         else
                                         {
-                                            <a class="btn-sm btn-warning groupChat" asp-action="ChatRoom" asp-route-userName="@item.SenderUser.UserName">Details</a>
+                                            <a class="chatRoom btn-sm btn-warning groupChat" asp-action="ChatRoom" asp-route-userName="@item.SenderUser.UserName">Details</a>
                                         }
                                     </td>
                                 </tr>
@@ -70,3 +70,7 @@
         </div>
     </div>
 </section>
+@section scripts2{ 
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+}

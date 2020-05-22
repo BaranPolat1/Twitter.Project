@@ -25,20 +25,38 @@ namespace FinalProject.Business.Services.Concrete
             AppUser user = _uow.User.Find(x => x.UserName == userName) ;
             if (!(_uow.Like.Any(x => x.UserId == user.Id && x.TweetId == tweet.Id)))
             {
-                Like like = new Like();
-                like.TweetId = tweet.Id;
-                like.UserId = user.Id;
-                _uow.Like.Add(like);
-                _uow.SaveChange();
-                js.likes = _uow.Like.FindByList(x => x.TweetId == tweet.Id).Count();
-                return js;
+                try
+                {
+                    Like like = new Like();
+                    like.TweetId = tweet.Id;
+                    like.UserId = user.Id;
+                    _uow.Like.Add(like);
+                    _uow.SaveChange();
+                    js.likes = _uow.Like.FindByList(x => x.TweetId == tweet.Id).Count();
+                    return js;
+                }
+                catch 
+                {
+                    js.likes = 0;
+                    return js;
+                   
+                }
+                
             }
             else
             {
                 Like like = _uow.Like.Find(x => x.TweetId == tweet.Id && x.UserId == user.Id);
-                _uow.Like.Delete(like);
-                _uow.SaveChange();
-                js.likes = _uow.Like.FindByList(x => x.TweetId == tweet.Id).Count();
+                if (like != null)
+                {
+                    _uow.Like.Delete(like);
+                    _uow.SaveChange();
+                    js.likes = _uow.Like.FindByList(x => x.TweetId == tweet.Id).Count();
+                }
+                else
+                {
+                    js.likes = 0;
+                }
+                
                 return js;
             }
         }

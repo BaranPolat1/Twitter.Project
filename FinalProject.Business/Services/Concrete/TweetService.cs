@@ -28,42 +28,54 @@ namespace FinalProject.Business.Services.Concrete
         }
         public void Add(TweetDTO model, string userName, string content, IFormFile image)
         {
-            var user = _uow.User.Find(x => x.UserName == userName);
-            model.Content = content;
-            model.UserId = user.Id;
-            if (image != null)
+            try
             {
-                string uploadDir = Path.Combine(_environment.WebRootPath, "media/tweet");
-                if (!Directory.Exists(uploadDir))
+                var user = _uow.User.Find(x => x.UserName == userName);
+                model.Content = content;
+                model.UserId = user.Id;
+                if (image != null)
                 {
-                    Directory.CreateDirectory(uploadDir);
+                    string uploadDir = Path.Combine(_environment.WebRootPath, "media/tweet");
+                    if (!Directory.Exists(uploadDir))
+                    {
+                        Directory.CreateDirectory(uploadDir);
+                    }
+                    string fileName = Path.GetFileName(image.FileName);
+                    using (FileStream stream = new FileStream(Path.Combine(uploadDir, fileName), FileMode.Create))
+                    {
+                        image.CopyTo(stream);
+                        model.ImagePath = fileName;
+                    }
                 }
-                string fileName = Path.GetFileName(image.FileName);
-                using (FileStream stream = new FileStream(Path.Combine(uploadDir, fileName), FileMode.Create))
-                {
-                    image.CopyTo(stream);
-                    model.ImagePath = fileName;
-                }
+                Tweet tweet = _mapper.Map<Tweet>(model);
+                _uow.Tweet.Add(tweet);
+                _uow.SaveChange();
             }
-            Tweet tweet = _mapper.Map<Tweet>(model);
-            _uow.Tweet.Add(tweet);
-            _uow.SaveChange();
+            catch (Exception)
+            {
+
+                
+            }
+         
         }
 
         public void Delete(Guid Id)
         {
-
             var tweet = _uow.Tweet.GetById(Id);
-            _uow.Tweet.Delete(tweet);
-            _uow.SaveChange();
-
-
+            if (tweet != null)
+            {
+                _uow.Tweet.Delete(tweet);
+                _uow.SaveChange();
+            }
         }
 
         public void Delete(Tweet tweet)
         {
-            _uow.Tweet.Delete(tweet);
-            _uow.SaveChange();
+            if (tweet != null)
+            {
+                _uow.Tweet.Delete(tweet);
+                _uow.SaveChange();
+            }
         }
 
         public TweetDTO Get(Guid Id)
@@ -83,8 +95,8 @@ namespace FinalProject.Business.Services.Concrete
                 tweets.AddRange(_uow.Tweet.FindByList(x => x.UserId == item.FollowedId));
             }
             tweets.AddRange(_uow.Tweet.FindByList(x => x.UserId == user.Id));
-            var tweetList = tweets.OrderByDescending(x => x.CreatedDate).Take(10);
-            var model = _mapper.Map<IList<TweetDTO>>(tweetList);
+           /* var tweetList = tweets.OrderByDescending(x => x.CreatedDate).Take(10)*/;
+            var model = _mapper.Map<IList<TweetDTO>>(tweets);
             return model;
         }
 

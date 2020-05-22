@@ -19,7 +19,7 @@ $(document).on("click", "a.delete", function (e) {
     e.preventDefault();
     var de = this;
     $.post(this.href).then(function (result) {
-        $(de).find("span.contentTweet").text(result.message);
+        $(de).css({ "visibility": "hidden" });
     });
 });
 
