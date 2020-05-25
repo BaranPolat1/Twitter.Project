@@ -72,8 +72,6 @@ namespace FinalProject.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(UserDTO model)
         {
             AppUser user = await userManager.FindByIdAsync(model.Id);
-
-
             if (ModelState.IsValid)
             {
                 user.UserName = model.UserName;
@@ -85,32 +83,22 @@ namespace FinalProject.Web.Areas.Admin.Controllers
                 if (model.ImageUpload != null)
                 {
                     string uploadDir = Path.Combine(webHostEnvironment.WebRootPath, "media/user");
-
-                    
-                        imageName = Guid.NewGuid().ToString() + "_" + model.ImageUpload.FileName;
-                        string filePath = Path.Combine(uploadDir, imageName);
-                        FileStream fs = new FileStream(filePath, FileMode.Create);
-
-                        await model.ImageUpload.CopyToAsync(fs);
-                        fs.Close();
-                    
-                   
-
+                    imageName = Guid.NewGuid().ToString() + "_" + model.ImageUpload.FileName;
+                    string filePath = Path.Combine(uploadDir, imageName);
+                    FileStream fs = new FileStream(filePath, FileMode.Create);
+                    await model.ImageUpload.CopyToAsync(fs);
+                    fs.Close();
                 }
                 model.ImagePath = imageName;
                 user.ImagePath = model.ImagePath;
-
                 if (model.Password != null)
                 {
                     user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
                 }
-
                 IdentityResult result = await userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-
                     uow.SaveChange();
-
                     return RedirectToAction("List");
                 }
                 else
@@ -118,13 +106,10 @@ namespace FinalProject.Web.Areas.Admin.Controllers
                     foreach (var item in result.Errors)
                     {
                         ModelState.AddModelError("", item.Description);
-
                     }
                 }
             }
-
             return View(user);
-
         }
     }
 }

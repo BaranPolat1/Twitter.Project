@@ -13,26 +13,10 @@
             <span class="glyphicon glyphicon-comment"></span><b style="color:white">Chat</b>
         </div>
         <div class="panel-body">
+            <ul id="messageList2">
+            </ul>
             <ul id="messageList">
-                @foreach (var item in Model.Messages)
-                {
-                    <li class="left clearfix">
-                        <span class="chat-img pull-left">
-                            <img src="~/media/user/@Url.Content(item.SenderUser.ImagePath)" alt="User Avatar" height="50" width="50" class="img-circle  " />
-                        </span>
-                        <div class="chat-body clearfix pb-1 mb-0 ml-2" style="color:white">
-                            <div class="header">
-                                <strong class="primary-font"><a asp-action="Profile" asp-controller="Profile" asp-route-userName="@item.SenderUser.UserName">@item.SenderUser.UserName</a></strong> <small class="pull-right text-muted">
-                                    <span class="glyphicon glyphicon-time"></span>@item.CreatedDate
-                                </small>
-                            </div>
-                            <p>
-                                @item.Content
-                            </p>
-                        </div>
-                    </li>
-
-                }
+                @await Html.PartialAsync("_MessageShowPartial", Model.Messages)
             </ul>
         </div>
         <div class="panel-footer">
@@ -47,9 +31,27 @@
 </div>
 <img src="~/media/user/@Url.Content(ViewBag.Image)" width="0" height="0" style="visibility:hidden" id="userImage1" />
 <input type="hidden" value="@Model.Id" id="groupName" />
-@section scripts2{
+<input type="hidden" value="@ViewBag.RecipientUser" id="recipientUser" />
 
+@section scripts2{
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/chat.js"></script>
+    <script>
+        var SayfaSayisi = 1;
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+                var recipient = $("#recipientUser").val();
+                $.ajax({
+                    url: '/Member/Message/Chatroom',
+                    data: { "sayfano": SayfaSayisi, "userName": recipient },
+                    success: function (data) {
+                        $("#messageList2").append(data);
+                        SayfaSayisi++;
 
+
+                    }
+                });
+            }
+        });
+    </script>
 }

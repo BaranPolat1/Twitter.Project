@@ -18,12 +18,12 @@ namespace FinalProject.Business.Services.Concrete
     {
         private IUnitOfWork _uow;
         private IMapper _mapper;
-        private ProjectContext _Db;
-        public MessageService(IUnitOfWork uow, IMapper mapper, ProjectContext Db)
+       
+        public MessageService(IUnitOfWork uow, IMapper mapper)
         {
             _mapper = mapper;
             _uow = uow;
-            _Db = Db;
+         
         }
         public IList<MessageDTO> GetAll()
         {
@@ -32,16 +32,17 @@ namespace FinalProject.Business.Services.Concrete
             return model;
         }
 
-        //live private chat sayfası. Parametreden gelen kullanıcı adına göre, kullanıcının benimle olan mesajlarını bu sayfada listeliyorum.
+       //Parametreden gelen kullanıcı adına göre, kullanıcının benimle olan mesajlarını bu metod ile listeliyorum.
         public IList<MessageDTO> GetChatBox(string userName, string userName2)
         {
             var a = _uow.User.Find(x => x.UserName == userName);
             var b = _uow.User.Find(x => x.UserName == userName2);
-            var message = _uow.Message.FindByList(x => (x.RecipientId == a.Id && x.SenderId == b.Id) || (x.RecipientId == b.Id && x.SenderId == a.Id)).OrderBy(x => x.CreatedDate);
+            var message = _uow.Message.FindByList(x => (x.RecipientId == a.Id && x.SenderId == b.Id) || (x.RecipientId == b.Id && x.SenderId == a.Id));
             IList<MessageDTO> model = _mapper.Map<IList<MessageDTO>>(message);
             return model;
         }
 
+        //Dinamik olarak ChatRoom yaratan metodum.
         public ChatRoomDTO GetChatRoom(string userName, string userName2)
         {
             ChatRoom chat = new ChatRoom();
@@ -51,7 +52,7 @@ namespace FinalProject.Business.Services.Concrete
             var chatBoxUser = _uow.ChatRoomUsers.FindByList(x => x.UserId == user1.Id);
             List<ChatRoom> chatRooms = new List<ChatRoom>();
             List<ChatRoomUsers> chatroomUsers = new List<ChatRoomUsers>();
-            //List<Message> messages1 = new List<Message>();
+           
             if (chatBoxUser.Count != 0)
             {
                 foreach (var item in chatBoxUser)

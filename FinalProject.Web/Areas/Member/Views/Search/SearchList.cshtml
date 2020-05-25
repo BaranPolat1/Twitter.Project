@@ -1,29 +1,26 @@
-﻿
-@model IEnumerable<FinalProject.Associate.DTO.UserDTO>
-
+﻿@model IEnumerable<FinalProject.Associate.DTO.UserDTO>
 @{
-    ViewData["Title"] = "GetFollowed";
+    ViewData["Title"] = "SearchList";
     Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
 }
-
 <table class="table" style="color:white">
     <thead>
         <tr>
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.First().UserName)
+                @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().FirstName)
+                @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().LastName)
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Email)
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Bio)
+                @Html.DisplayNameFor(model => model.Bio)
             </th>
             <th>
                 Image
@@ -31,46 +28,38 @@
             <th></th>
         </tr>
     </thead>
-    <tbody style="color:white" id="getFollowed">
+    <tbody id="getSearch">
         @await Html.PartialAsync("_UserListPartial", Model)
     </tbody>
 </table>
-<div id="pencere2" style="display:none;width:133px;height:25px;border:0 solid black;position:fixed;top:50%;left:50%;padding:2px;text-align:center; color:white">
+<input type="hidden" value="@TempData["UserName"]" id="baran3" />
+<div id="pencere3" style="display:none;width:133px;height:25px;border:0 solid black;position:fixed;top:50%;left:50%;padding:2px;text-align:center; color:white">
     Yükleniyor...
 </div>
-<input type="hidden" value="@ViewBag.UserName" id="baran2" />
-@section scripts2{
-    <script>
-        $(document).on("click", "a.follow", function (a) {
-            a.preventDefault();
-            var me = this;
-            $.post(this.href).then(function (results) {
-                $(me).find("b.result").text(results.message);
-            });
-        });
-    </script>
+@section scripts2{ 
+
     <script>
         var SayfaSayisi = 1;
         var SayfaPost = true;
-        var userName = $("#baran2").val();
+        var userName = $("#baran3").val();
         $(window).scroll(function () {
             if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
                 if (SayfaPost) {
-                  $("#pencere2").show();
+                    $("#pencere3").show();
                     //ScrollBar sona geldiğinde pencereyi göster...
                     $.ajax({
-                        url: '/Member/Follow/GetFollowed',
+                        url: '/Member/Search/SearchList',
                         data: { "sayfano": SayfaSayisi, "userName": userName },
                         success: function (data) {
                             if ($.trim(data) == '') {
                                 SayfaPost = false;
                             }
                             else {
-                                $("#getFollowed").append(data);
+                                $("#getSearch").append(data);
                                 SayfaSayisi++;
-                                 
+                                
                             }
-                            $("#pencere2").hide();
+                            $("#pencere3").hide();
                             //Ajax işlemleri bittirip, sayfalama neticesinde ilgili verilerin ilgili alana bastırılmasından sonra pencereyi kapat.
                         }
                     });
@@ -78,5 +67,14 @@
             }
         });
     </script>
-
+<script>
+      $(document).on("click", "a.follow", function (a) {
+            a.preventDefault();
+            var me = this;
+            $.post(this.href).then(function (results) {
+                $(me).find("b.result").text(results.message);
+            });
+        });
+</script>
 }
+

@@ -2,7 +2,7 @@
 using FinalProject.Business.Services.Abstract;
 using FinalProject.Business.UnitOfWork.Abstraction;
 using FinalProject.Entities.Entity;
-
+using System.Collections;
 
 namespace FinalProject.Business.Services.Concrete
 {
@@ -16,29 +16,20 @@ namespace FinalProject.Business.Services.Concrete
         public JsonFollowVM Follow(string Id, string userName)
         {
             JsonFollowVM js = new JsonFollowVM();
-            var user = _uow.User.Find(x=>x.Id == Id);
-            var user2 =  _uow.User.Find(x=>x.UserName == userName);
-            if (_uow.Follow.Any(x => x.FollowerId == user2.Id && x.FollowedId == user.Id))
+            var user = _uow.User.Find(x => x.Id == Id);
+            var user2 = _uow.User.Find(x => x.UserName == userName);
+            if (user != null)
             {
-                Follow follow = _uow.Follow.Find(x => x.FollowerId == user2.Id && x.FollowedId == user.Id);
-                if (follow != null)
+                if (_uow.Follow.Any(x => x.FollowerId == user2.Id && x.FollowedId == user.Id))
                 {
+                    Follow follow = _uow.Follow.Find(x => x.FollowerId == user2.Id && x.FollowedId == user.Id);
                     _uow.Follow.Delete(follow);
                     _uow.SaveChange();
                     js.message = "Follow";
                     js.follow = _uow.Follow.FindByList(x => x.FollowedId == Id).Count;
+                    return js;
                 }
                 else
-                {
-                    js.message = "Böyle bir kullanıcı yok!";
-                    js.follow = 0;
-                }
-                
-                return js;
-            }
-            else
-            {
-                try
                 {
                     Follow follow = new Follow();
                     follow.FollowedId = user.Id;
@@ -49,15 +40,11 @@ namespace FinalProject.Business.Services.Concrete
                     js.follow = _uow.Follow.FindByList(x => x.FollowedId == Id).Count;
                     return js;
                 }
-                catch 
-                {
-
-                    js.message = "böyle bir kullanıcı yok!";
-                    js.follow = 0;
-                    return js;
-                }
-                   
-                
+            }
+            else
+            {
+                js.message = "Böyle bir kullanıcı yok!";
+                return js;
             }
         }
     }

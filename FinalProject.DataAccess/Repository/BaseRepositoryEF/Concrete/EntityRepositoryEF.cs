@@ -24,7 +24,8 @@ namespace FinalProject.DataAccess.KernelRepository.Concrete
       
         public void Add(T item)
         {
-          table.Add(item);
+           
+         table.Add(item);
         }
 
         public bool Any(Expression<Func<T, bool>> exp)

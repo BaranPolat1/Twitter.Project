@@ -1,62 +1,86 @@
 ﻿@model IEnumerable<FinalProject.Associate.DTO.UserDTO>
 
-    @{
+@{
     ViewData["Title"] = "OnlineFirends";
     Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
-    }
-
-    <h1>OnlineFirends</h1>
-
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-
-                <th>
-                    @Html.DisplayNameFor(model => model.UserName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Bio)
-                </th>
-                <th>
-                    Image
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.Bio)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImagePath)
-                </td>
-                <td>
-                    <a class="btn-sm  btn-warning" href="@Url.Action("Profile","Profile",new {item.UserName })">Profile</a>
-                    <a class="btn-sm btn-primary" href="@Url.Action("ChatBox","Message",new {item.UserName })">Message</a>
-                </td>
-            </tr>
 }
-        </tbody>
-    </table>
+
+<h1>OnlineFirends</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bio)
+            </th>
+            <th>
+                Image
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody style="color:white" id="geOnline">
+        @await Html.PartialAsync("_UserListPartial", Model)
+    </tbody>
+</table>
+<div id="pencere4" style="display:none;width:133px;height:25px;border:0 solid black;position:fixed;top:50%;left:50%;padding:2px;text-align:center; color:white">
+    Yükleniyor...
+</div>
+<input type="hidden" value="@ViewBag.UserName" id="baran4" />
+@section scripts2{
+    <script>
+        $(document).on("click", "a.follow", function (a) {
+            a.preventDefault();
+            var me = this;
+            $.post(this.href).then(function (results) {
+                $(me).find("b.result").text(results.message);
+            });
+        });
+    </script>
+
+    <script>
+        var SayfaSayisi = 1;
+        var userName = $("#baran4").val();
+        var SayfaPost = true;
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+                if (SayfaPost) {
+                    $("#pencere4").show();
+                    //ScrollBar sona geldiğinde pencereyi göster...
+                    $.ajax({
+                        url: '/Member/Home/OnlineFriends',
+                        data: { "sayfano": SayfaSayisi, "userName": userName },
+                        success: function (data) {
+                            if ($.trim(data) == '') {
+                                SayfaPost = false;
+                            }
+                            else {
+                                $("#geOnline").append(data);
+                                SayfaSayisi++;
+
+                            }
+                            $("#pencere4").hide();
+                            //Ajax işlemleri bittirip, sayfalama neticesinde ilgili verilerin ilgili alana bastırılmasından sonra pencereyi kapat.
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+}

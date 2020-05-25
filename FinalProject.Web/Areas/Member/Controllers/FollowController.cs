@@ -17,6 +17,7 @@ namespace FinalProject.Web.Areas.Member.Controllers
     [Area("Member")]
     public class FollowController : Controller
     {
+        int pageSize = 5;
         private IFollowService _followService;
         private IAppUserService _appUserService;
         public FollowController(IFollowService followService, IAppUserService appUserService)
@@ -30,26 +31,26 @@ namespace FinalProject.Web.Areas.Member.Controllers
             return new JsonResult(_followService.Follow(Id, User.Identity.Name));
         }
 
-        public IActionResult GetFollower(string userName,int sayfa=1)
+        public IActionResult GetFollower(string userName,int? sayfano)
         {
-            var model = _appUserService.GetFollower(userName).ToPagedList(sayfa,15);
-            foreach (var item in model)
+            ViewBag.UserName = userName;
+            var model = _appUserService.GetFollower(userName,sayfano,pageSize);
+            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
             {
-                var result = _appUserService.TakipEdiyorMu(item.UserName, User.Identity.Name);
-                if (result == true)
-                {
-                    ViewBag.Follow = "Unfollow";
-                }
-                else
-                {
-                    ViewBag.Follow = "Unfollow";
-                }
+                return PartialView("_UserListPartial", model);
             }
             return View(model);
         }
-        public IActionResult GetFollowed(string userName,int sayfa =1)
+        public IActionResult GetFollowed(string userName,int? sayfano)
         {
-            var model = _appUserService.GetFollowed(userName).ToPagedList(sayfa, 15);
+            ViewBag.UserName = userName;
+            var model = _appUserService.GetFollowed(userName,sayfano,pageSize);
+            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                return PartialView("_UserListPartial", model);
+            }
             return View(model);
         }
     }

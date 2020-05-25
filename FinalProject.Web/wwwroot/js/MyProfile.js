@@ -18,8 +18,9 @@ $(document).on("click", "a.like", function (e) {
 $(document).on("click", "a.delete", function (e) {
     e.preventDefault();
     var de = this;
+    $(de).css({ "visibility": "hidden" });
     $.post(this.href).then(function (result) {
-        $(de).css({ "visibility": "hidden" });
+        
     });
 });
 
@@ -31,3 +32,7 @@ $(document).on("click", "a.follow", function (a) {
         document.querySelector(".result").innerHTML = results.message;
     });
 });
+
+
+
+

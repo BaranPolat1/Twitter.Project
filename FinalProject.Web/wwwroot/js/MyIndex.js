@@ -11,16 +11,16 @@ $(document).on("click", "a.retweet", function (a) {
 
     var ne = this;
     $.post(this.href).then(function (results) {
-        
+
         $(ne).find("span.retweet-count").text(results.retweets);
     });
 });
 $(document).on("click", "a.delete", function (e) {
     e.preventDefault();
     var de = this;
-   
+    $(de).css({ "visibility": "hidden" });
     $.post(this.href).then(function (result) {
-        $(de).css({ "visibility": "hidden" });
+
     });
 });
 window.addEventListener('load', function () {
@@ -35,3 +35,4 @@ window.addEventListener('load', function () {
         }
     });
 });
+

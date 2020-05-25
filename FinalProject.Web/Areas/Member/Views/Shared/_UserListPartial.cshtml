@@ -1,0 +1,55 @@
+﻿@model IEnumerable<FinalProject.Associate.DTO.UserDTO>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @if (item.OnlineMi == true)
+            {
+                <a class="btn-sm btn-success rounded"></a>
+            }
+            else
+            {
+                <a class="btn-sm btn-danger rounded"></a>
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bio)
+        </td>
+        <td>
+            <img src="~/media/user/@Url.Content(item.ImagePath)" width="100" height="100" />
+        </td>
+        <td>
+            <a class="btn-sm btn-warning" asp-action="Profile" asp-controller="Profile" asp-route-userName="@item.UserName">Profile</a>
+            <a class="btn-sm btn-primary" asp-action="ChatRoom" asp-controller="Message" asp-route-userName="@item.UserName">Message</a>
+            @if (item.Followed.Any(x => x.FollowerUser.UserName == User.Identity.Name))
+            {
+                <a class="follow btn-sm btn-danger" href="@Url.Action("Follow","Follow",new {item.Id })"><b class="result">Unfollow</b></a>
+            }
+            else
+            {
+                <a class="follow btn-sm btn-danger" href="@Url.Action("Follow","Follow",new {item.Id })"><b class="result">Follow</b></a>
+            }
+
+
+
+
+
+
+
+        </td>
+    </tr>
+}
+

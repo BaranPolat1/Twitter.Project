@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FinalProject.Associate.DTO;
+using FinalProject.Business.Services.Abstract;
 using FinalProject.Business.UnitOfWork.Abstraction;
 using FinalProject.DataAccess.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -14,29 +15,41 @@ namespace FinalProject.Web.Areas.Member.Controllers
     [Area("Member")]
     public class SearchController : Controller
     {
-        private IMapper mapper;
+        int pageSize = 15;
         private IUnitOfWork _db;
-        public SearchController(IUnitOfWork db, IMapper _mapper)
+        private IAppUserService _user;
+        public SearchController(IUnitOfWork db, IAppUserService user)
         {
-
+            _user = user;
             _db = db;
-            mapper = _mapper;
+           
         }
 
-        public IActionResult SearchUser(string userName)
+        public IActionResult SearchUser(string term)
         {
-            var users = from u in _db.User.GetAll()
-                        select u;
-            if (!String.IsNullOrEmpty(userName))
+            var users = _db.User.FindByList(x=>x.UserName.StartsWith(term)).Take(pageSize);
+            var model = from c in users
+                        select new
+                        {
+                            id = c.Id,
+                            value = c.UserName,
+                            url = "/Member/Profile/Profile?UserName=" + c.UserName
+                        };
+            return new JsonResult(model);
+        }
+        public IActionResult SearchList(string userName,int? sayfano)
+        {
+            if (userName == null)
             {
-                users = users.Where(s => s.UserName.Contains(userName));
+                return NotFound();
             }
-            else
-            {
-                ModelState.AddModelError("", "Kullanıcı bulunamadı");
-            }
-            var model = mapper.Map<List<UserDTO>>(users);
+            var model = _user.SearchList(userName, sayfano, pageSize);
             TempData["UserName"] = userName;
+            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                return PartialView("_UserListPartial", model);
+            }
             return View(model);
         }
     }

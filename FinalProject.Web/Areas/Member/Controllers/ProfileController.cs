@@ -16,7 +16,7 @@ namespace FinalProject.Web.Areas.Member.Controllers
     [Area("Member")]
     public class ProfileController : Controller
     {
-        
+        int PageSize = 10;
         private IAppUserService _userService;
         private IRetweetService _retweetService;
         private ITweetService _tweetService;
@@ -26,10 +26,10 @@ namespace FinalProject.Web.Areas.Member.Controllers
             _retweetService = retweetService;
             _tweetService = tweetService;
         }
-        public IActionResult Profile(string userName)
+        public IActionResult Profile(string userName,TweetUserVM model)
         {
             var user = _userService.GetByUserName(userName);
-            var result= _userService.TakipEdiyorMu(userName, User.Identity.Name);
+            var result = _userService.TakipEdiyorMu(userName, User.Identity.Name);
             if (result == true)
             {
                 ViewBag.Follow = "UnFollow";
@@ -38,12 +38,10 @@ namespace FinalProject.Web.Areas.Member.Controllers
             {
                 ViewBag.Follow = "Follow";
             }
-            UserVM model = new UserVM();
-            model.Retweets = _retweetService.GetByUser(user.Id);
-            model.Tweets = _tweetService.GetByUsers(user.Id);
+            model.Retweets = _retweetService.GetByUser(user.Id).Take(PageSize).ToList();
+            model.Tweets = _tweetService.GetByUsers(user.Id).Take(PageSize).ToList();
             model.User = _userService.GetByUserName(user.UserName);
             return View(model);
         }
-      
     }
 }

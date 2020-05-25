@@ -41,11 +41,10 @@ namespace FinalProject.Web.Areas.Member.Controllers
             _tweetService.Delete(Id);
             return new JsonResult("");
         }
-        public IActionResult Show(Guid Id)
+        public IActionResult Show(Guid Id,TweetUserVM model)
         {
             var user = _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Image = Path.GetFileName(user.ImagePath);
-            TweetVM model = new TweetVM();
             model.Tweet = _tweetService.Get(Id);
             model.Comments = _commentService.GetByTweet(Id);
             model.Retweets = _retweetService.GetByTweet(Id);

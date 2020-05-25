@@ -17,28 +17,35 @@ namespace FinalProject.Web.Areas.Member.Controllers
     [Area("Member")]
     public class HomeController : Controller
     {
+        int pageSize = 30;
         private ITweetService _tweetService;
         private IRetweetService _retweetService;
         private IAppUserService _appUserService;
         public HomeController(ITweetService tweetService,
-         IRetweetService retweetService,IAppUserService appUserService)
+         IRetweetService retweetService, IAppUserService appUserService, IUnitOfWork unitOfWork)
         {
             _appUserService = appUserService;
             _tweetService = tweetService;
             _retweetService = retweetService;
+
         }
-        public IActionResult Index(TweetVM model)
+        public IActionResult OnlineFriends(int? sayfano)
+        {
+            ViewBag.UserName = User.Identity.Name;
+            var model = _appUserService.GetOnlineFriends(User.Identity.Name, sayfano, pageSize);
+            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                return PartialView("_UserListPartial", model);
+            }
+            return View(model);
+        }
+        public IActionResult Index(TweetUserVM model)
         {
             var user = _appUserService.GetByUserName(User.Identity.Name);
             ViewBag.Image = Path.GetFileName(user.ImagePath);
-            model.Tweets = _tweetService.GetByFollowed(User.Identity.Name);
-            model.Retweets = _retweetService.GetByFollowed(User.Identity.Name);
-            return View(model);
-        }
-       
-        public IActionResult OnlineFriends()
-        {
-            var model = _appUserService.GetOnlineFriends(User.Identity.Name);
+            model.Tweets = _tweetService.GetByFollowed(User.Identity.Name).Take(pageSize).ToList();
+            model.Retweets = _retweetService.GetByFollowed(User.Identity.Name).Take(pageSize).ToList();
             return View(model);
         }
     }

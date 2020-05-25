@@ -17,12 +17,15 @@ namespace FinalProject.Web.Areas.Member.Controllers
     [Area("Member")]
     public class MessageController : Controller
     {
+        int pageSize = 10;
         private IMessageService _messageService;
         private IAppUserService _userService;
-        public MessageController(IMessageService messageService, IAppUserService userService)
+        private IMapper _map;
+        public MessageController(IMessageService messageService, IAppUserService userService, IMapper map)
         {
             _messageService = messageService;
             _userService = userService;
+            _map = map;
         }
         [HttpGet]
         public IActionResult MessageBox()
@@ -36,7 +39,7 @@ namespace FinalProject.Web.Areas.Member.Controllers
             var user2 = _userService.GetByUserName(User.Identity.Name);
             ViewBag.RecipientId = user.Id;
             ViewBag.Image = Path.GetFileName(user2.ImagePath);
-            return View(_messageService.GetChatRoom(User.Identity.Name,userName));
+            return View(_messageService.GetChatRoom(User.Identity.Name, userName));
         }
 
 

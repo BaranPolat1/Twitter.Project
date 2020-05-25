@@ -1,4 +1,4 @@
-﻿@model FinalProject.Associate.VM.UserVM
+﻿@model FinalProject.Associate.VM.TweetUserVM
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
@@ -6,7 +6,7 @@
 
 <section class="content ">
     <div class="row">
-          <div class="col-md-3">
+        <div class="col-md-3">
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile bg-black">
@@ -61,19 +61,18 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <div class="tab-content bg-black">
-                    <div class="active tab-pane" id="activity">
-                        @await Html.PartialAsync("_TweetShowPartial", Model.Tweets)
-                        @await Html.PartialAsync("_RetweetShowPartial", Model.Retweets)
+                    <div class="active tab-pane" id="kulhatasizolmaz">
+                        @await Html.PartialAsync("_TweetRetweetShowPartial", Model)
+                    </div>
+                     <div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<input type="hidden" value="@Model.User.UserName" id="kullaniciAdi" />
 @section scripts2{
-
     <script src="~/js/MyProfile.js"></script>
-    <script src="~/js/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/chat.js"></script>
-
+    
 }

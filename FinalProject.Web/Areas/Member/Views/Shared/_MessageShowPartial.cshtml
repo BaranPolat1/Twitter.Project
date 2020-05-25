@@ -1,0 +1,21 @@
+﻿@model IEnumerable<FinalProject.Entities.Entity.Message>
+
+@foreach (var item in Model)
+{
+    <li class="left clearfix">
+        <span class="chat-img pull-left">
+            <img src="~/media/user/@Url.Content(item.SenderUser.ImagePath)" alt="User Avatar" height="50" width="50" class="img-circle  " />
+        </span>
+        <div class="chat-body clearfix pb-1 mb-0 ml-2" style="color:white">
+            <div class="header">
+                <strong class="primary-font"><a asp-action="Profile" asp-controller="Profile" asp-route-userName="@item.SenderUser.UserName">@item.SenderUser.UserName</a></strong> <small class="pull-right text-muted">
+                    <span class="glyphicon glyphicon-time"></span>@item.CreatedDate
+                </small>
+            </div>
+            <p>
+                @item.Content
+            </p>
+        </div>
+    </li>
+
+}

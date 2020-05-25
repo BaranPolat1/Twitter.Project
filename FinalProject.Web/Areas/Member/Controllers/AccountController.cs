@@ -47,32 +47,28 @@ namespace FinalProject.Web.Areas.Member.Controllers
         public async Task<IActionResult> Edit(UserDTO model)
         {
             AppUser user = await _userManager.FindByIdAsync(model.Id);
-
             if (ModelState.IsValid)
             {
-              
                 if (model.ImageUpload != null)
                 {
                     string uploadDir = Path.Combine(webHostEnvironment.WebRootPath, "media/user");
-                
-                        model.ImagePath = Guid.NewGuid().ToString() + "_" + model.ImageUpload.FileName;
-                        string filePath = Path.Combine(uploadDir, model.ImagePath);
-                        FileStream fs = new FileStream(filePath, FileMode.Create);
-                        await model.ImageUpload.CopyToAsync(fs);
-                        fs.Close();
-                    user.InjectFrom<FilterId>(model);
+
+                    model.ImagePath = Guid.NewGuid().ToString() + "_" + model.ImageUpload.FileName;
+                    string filePath = Path.Combine(uploadDir, model.ImagePath);
+                    FileStream fs = new FileStream(filePath, FileMode.Create);
+                    await model.ImageUpload.CopyToAsync(fs);
+                    fs.Close();
                 }
                 else
                 {
-
+                    model.ImagePath = user.ImagePath;
                 }
-              
-
+                user.InjectFrom<FilterId>(model);
                 if (model.Password != null)
                 {
                     user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
                 }
-                 IdentityResult result = await _userManager.UpdateAsync(user);
+                IdentityResult result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
                     user.OnlineMi = false;

@@ -15,7 +15,7 @@ namespace FinalProject.Business.Services.Concrete
     {
         private IUnitOfWork _uow;
         private IMapper _mapper;
-        public RetweetService(IUnitOfWork uow,IMapper mapper)
+        public RetweetService(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
             _mapper = mapper;
@@ -23,15 +23,16 @@ namespace FinalProject.Business.Services.Concrete
 
         public IList<RetweetDTO> GetByFollowed(string userName)
         {
-            AppUser user = _uow.User.Find(x=>x.UserName == userName);
+            AppUser user = _uow.User.Find(x => x.UserName == userName);
             var followed = _uow.Follow.FindByList(x => x.FollowerId == user.Id);
             List<Retweet> retweets = new List<Retweet>();
             foreach (var item in followed)
             {
-                retweets.AddRange(_uow.Retweet.FindByList(x => x.UserId == item.FollowedId).OrderByDescending(x => x.CreatedDate).Take(10));
+                retweets.AddRange(_uow.Retweet.FindByList(x => x.UserId == item.FollowedId));
             }
-            retweets.AddRange(_uow.Retweet.FindByList(x => x.UserId == user.Id).OrderByDescending(x => x.CreatedDate).Take(10));
-            IList<RetweetDTO> model = _mapper.Map<IList<RetweetDTO>>(retweets);
+            retweets.AddRange(_uow.Retweet.FindByList(x => x.UserId == user.Id));
+            var retweetList = retweets.OrderByDescending(x => x.CreatedDate);
+            IList<RetweetDTO> model = _mapper.Map<IList<RetweetDTO>>(retweetList);
             return model;
         }
 
@@ -44,7 +45,7 @@ namespace FinalProject.Business.Services.Concrete
 
         public IList<RetweetDTO> GetByUser(string userId)
         {
-            var retweet = _uow.Retweet.FindByList(x => x.UserId == userId);
+            var retweet = _uow.Retweet.FindByList(x => x.UserId == userId).OrderByDescending(x => x.CreatedDate);
             IList<RetweetDTO> model = _mapper.Map<IList<RetweetDTO>>(retweet);
             return model;
         }
@@ -53,31 +54,31 @@ namespace FinalProject.Business.Services.Concrete
         {
             JsonRetweetVM js = new JsonRetweetVM();
             Tweet tweet = _uow.Tweet.GetById(Id);
-            AppUser user = _uow.User.Find(x=>x.UserName == userName);
-            if (!(_uow.Retweet.Any(x => x.UserId == user.Id && x.TweetId == tweet.Id)))
+            AppUser user = _uow.User.Find(x => x.UserName == userName);
+            if (tweet != null)
             {
-                Retweet retweet = new Retweet();
-                retweet.UserId = user.Id;
-                retweet.TweetId = tweet.Id;
-                _uow.Retweet.Add(retweet);
-                _uow.SaveChange();
-                js.retweets = _uow.Retweet.FindByList(x => x.TweetId == tweet.Id).Count();
-                return js;
-            }
-            else
-            {
-                Retweet retweet = _uow.Retweet.Find(x => x.TweetId == tweet.Id && x.UserId == user.Id);
-                if (retweet != null)
+                if (!(_uow.Retweet.Any(x => x.UserId == user.Id && x.TweetId == tweet.Id)))
                 {
-                    _uow.Retweet.Delete(retweet);
+                    Retweet retweet = new Retweet();
+                    retweet.UserId = user.Id;
+                    retweet.TweetId = tweet.Id;
+                    _uow.Retweet.Add(retweet);
                     _uow.SaveChange();
                     js.retweets = _uow.Retweet.FindByList(x => x.TweetId == tweet.Id).Count();
-                  
+                    return js;
                 }
                 else
                 {
-                    js.retweets = 0;
+                    Retweet retweet = _uow.Retweet.Find(x => x.TweetId == tweet.Id && x.UserId == user.Id);
+                    _uow.Retweet.Delete(retweet);
+                    _uow.SaveChange();
+                    js.retweets = _uow.Retweet.FindByList(x => x.TweetId == tweet.Id).Count();
+                    return js;
                 }
+            }
+            else
+            {
+                js.retweets = 0;
                 return js;
             }
         }

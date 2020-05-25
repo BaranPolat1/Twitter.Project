@@ -1,4 +1,11 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(document).ready(function () {
+    $("#userSearch").autocomplete({
+        source: '/Member/Search/SearchUser',
 
-// Write your JavaScript code.
+        minLength: 1,
+        select: function (event, ui) {
+            window.location = ui.item.url;
+        }
+
+    });
+});

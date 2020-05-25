@@ -1,21 +1,16 @@
-﻿@model FinalProject.Associate.VM.TweetVM
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
-
-
 }
+@model FinalProject.Associate.VM.TweetUserVM
 @await Html.PartialAsync("_TweetAddPartial", Model.Tweet)
-
-<div class="my-0 p-0 bg-black rounded shadow-sm col-md-8 " id="" style="background-color:black">
-    <h6 class="border-bottom border-gray pb-2 mb-0" style="background-color: black">
-        <span style="color:white"><b>TimeLine</b></span>
-    </h6>
-    @await Html.PartialAsync("_TweetShowPartial", Model.Tweets)
-    @await Html.PartialAsync("_RetweetShowPartial", Model.Retweets)
+<div>Timeline</div>
+<div id="Twist">
+    @await Html.PartialAsync("_TweetRetweetShowPartial", Model)
+    <div id="pencere" style="display:none;width:133px;height:25px;border:0 solid black;position:fixed;top:50%;left:50%;padding:2px;text-align:center; color:white">
+        Yükleniyor...
+    </div>
 </div>
-
-
 @section scripts2{
     <script src="~/js/MyIndex.js"></script>
     <script>
@@ -39,14 +34,14 @@
                contentType: false,
                         success: function () {
                         var myImage = document.querySelector("#myImg").src;
-                        var image2 = "";
-                        var image = new Image();
-                        if (myImage != '#' || myImage != "" || myImage != null) {
+                            var image2 = "";
+                            if (file != null) {
+                            var image = new Image();
                             image.src = myImage;
                             image.width = '100';
                             image.height = '100';
                             image2 = "<img id='myImg' src='" + image.src+"' alt='your image' heigh='100' width='100'>";
-                        }
+                            }
                         var img = new Image();
                         var src = document.getElementById("userImage").src;
                         img.src = src;
@@ -68,4 +63,7 @@
 
         };
     </script>
+
+
 }
+

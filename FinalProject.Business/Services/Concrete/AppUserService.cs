@@ -21,7 +21,7 @@ namespace FinalProject.Business.Services.Concrete
         {
             _uow = uow;
             _mapper = mapper;
-                
+
         }
         public void Delete(AppUser user)
         {
@@ -31,13 +31,13 @@ namespace FinalProject.Business.Services.Concrete
 
         public void Delete(string Id)
         {
-            var user = _uow.User.Find(x=>x.Id == Id);
+            var user = _uow.User.Find(x => x.Id == Id);
             _uow.User.Delete(user);
             _uow.SaveChange();
         }
         public UserDTO GetById(string Id)
         {
-            var user = _uow.User.Find(x=>x.Id == Id);
+            var user = _uow.User.Find(x => x.Id == Id);
             UserDTO model = _mapper.Map<UserDTO>(user);
             return model;
         }
@@ -53,10 +53,10 @@ namespace FinalProject.Business.Services.Concrete
             }
             var model = _mapper.Map<IList<UserDTO>>(users);
             return model;
-          
+
         }
 
-       //seçilen bir tweeti retweet yapan kullanıcıların listesi
+        //seçilen bir tweeti retweet yapan kullanıcıların listesi
         public IList<UserDTO> GetByRetweet(Guid Id)
         {
             Tweet tweet = _uow.Tweet.GetById(Id);
@@ -69,7 +69,7 @@ namespace FinalProject.Business.Services.Concrete
             var model = _mapper.Map<List<UserDTO>>(appUsers);
             return model;
         }
- 
+
         public UserDTO GetByUserName(string userName)
         {
             var user = _uow.User.Find(x => x.UserName == userName);
@@ -77,35 +77,48 @@ namespace FinalProject.Business.Services.Concrete
             return model;
         }
 
-        public IList<UserDTO> GetFollowed(string userName)
+        public IList<UserDTO> GetFollowed(string userName, int? sayfano, int pageSize)
         {
+            IList<UserDTO> model = null;
             var users = _uow.User.Find(x => x.UserName == userName);
             var followed = _uow.Follow.FindByList(x => x.FollowerId == users.Id);
             List<AppUser> followedList = new List<AppUser>();
-           
+
             foreach (var item in followed)
             {
                 followedList.AddRange(_uow.User.FindByList(x => x.Id == item.FollowedId));
 
             }
-            var model = _mapper.Map<IList<UserDTO>>(followedList);
+            if (sayfano == null)
+            {
+                model = _mapper.Map<IList<UserDTO>>(followedList).OrderBy(X => X.UserName).Take(pageSize).ToList();
+            }
+            else
+            {
+                model = _mapper.Map<IList<UserDTO>>(followedList).OrderBy(X => X.UserName).Skip(pageSize * sayfano.Value).Take(pageSize).ToList();
+            }
+
             return model;
         }
 
-        public IList<UserDTO> GetFollower(string userName)
+        public IList<UserDTO> GetFollower(string userName, int? sayfano, int pageSize)
         {
+            IList<UserDTO> model = null;
             var users = _uow.User.Find(x => x.UserName == userName);
             var followed = _uow.Follow.FindByList(x => x.FollowedId == users.Id);
             List<AppUser> followerList = new List<AppUser>();
-
             foreach (var item in followed)
             {
                 followerList.AddRange(_uow.User.FindByList(x => x.Id == item.FollowerId));
-
             }
-            
-
-            IList<UserDTO> model = _mapper.Map<IList<UserDTO>>(followerList);
+            if (sayfano == null)
+            {
+                model = _mapper.Map<IList<UserDTO>>(followerList).OrderBy(X => X.UserName).Take(pageSize).ToList();
+            }
+            else
+            {
+                model = _mapper.Map<IList<UserDTO>>(followerList).OrderBy(X => X.UserName).Skip(pageSize * sayfano.Value).Take(pageSize).ToList();
+            }
             return model;
         }
 
@@ -116,10 +129,11 @@ namespace FinalProject.Business.Services.Concrete
             return model;
         }
 
-        public IList<UserDTO> GetOnlineFriends(string userName)
+        public IList<UserDTO> GetOnlineFriends(string userName,int? sayfano,int pageSize)
         {
-            var users = _uow.User.Find(x=>x.UserName == userName);
+            var users = _uow.User.Find(x => x.UserName == userName);
             var followed = _uow.Follow.FindByList(x => x.FollowerId == users.Id);
+            IList<UserDTO> model = null;
             List<AppUser> followedList = new List<AppUser>();
             List<AppUser> online = new List<AppUser>();
             foreach (var item in followed)
@@ -131,16 +145,21 @@ namespace FinalProject.Business.Services.Concrete
             {
                 online.AddRange(_uow.User.FindByList(x => x.Id == item.Id && x.OnlineMi == true));
             }
-            var model = _mapper.Map<IList<UserDTO>>(online);
+            if (sayfano == null)
+            {
+                model = _mapper.Map<IList<UserDTO>>(online).OrderBy(x=>x.UserName).Take(pageSize).ToList();
+            }
+            else
+            {
+                model = _mapper.Map<IList<UserDTO>>(online).OrderBy(x => x.UserName).Skip(pageSize * sayfano.Value).Take(pageSize).ToList();
+            }
             return model;
         }
-
-        
 
         public bool TakipEdiyorMu(string userName, string userName2)
         {
             var user = _uow.User.Find(x => x.UserName == userName);
-             var user2 = _uow.User.Find(x=>x.UserName == userName2);
+            var user2 = _uow.User.Find(x => x.UserName == userName2);
             var follower = _uow.Follow.FindByList(x => x.FollowedId == user.Id);
             if (follower.Any(x => x.FollowerId == user2.Id))
             {
@@ -150,16 +169,44 @@ namespace FinalProject.Business.Services.Concrete
             {
                 return false;
             }
-           
+
         }
 
         public void Update(UserDTO model)
         {
-            var user = _uow.User.Find(x=>x.Id == model.Id);
+            var user = _uow.User.Find(x => x.Id == model.Id);
             user.InjectFrom<FilterId>(model);
             _uow.User.Update(user);
             _uow.SaveChange();
-           
+
         }
+ 
+        public IList<UserDTO> SearchList(string userName, int? sayfano, int pagesize)
+        {
+            IList<UserDTO> model = null;
+            var users = from u in _uow.User.GetAll()
+                        select u;
+
+            if (sayfano == null)
+            {
+                if (!String.IsNullOrEmpty(userName))
+                {
+                    users = users.Where(s => s.UserName.Contains(userName)).OrderBy
+                        (x => x.UserName).Take(pagesize).ToList();
+                }
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(userName))
+                {
+                    users = users.Where(s => s.UserName.Contains(userName)).OrderBy(x => x.UserName).Skip(pagesize * sayfano.Value).Take(pagesize).ToList();
+                }
+            }
+
+            model = _mapper.Map<IList<UserDTO>>(users);
+
+            return model;
+        }
+
     }
 }

@@ -5,10 +5,16 @@ using System.Text;
 
 namespace FinalProject.Associate.VM
 {
-   public class UserVM
+    public class TweetUserVM
     {
-        public IList<RetweetDTO> Retweets { get; set; }
-        public UserDTO User { get; set; }
+        
         public IList<TweetDTO> Tweets { get; set; }
+        public IList<CommentDTO> Comments { get; set; }
+        public IList<RetweetDTO> Retweets { get; set; }
+        public CommentDTO Comment { get; set; }
+        public TweetDTO Tweet { get; set; }
+        public UserDTO User { get; set; }
+
+
     }
 }

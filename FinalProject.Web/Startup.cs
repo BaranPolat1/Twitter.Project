@@ -101,8 +101,7 @@ namespace FinalProject.Web
             //===== Bundle =====
             app.UseSmidge(bundle =>
             {
-              
-                bundle.CreateCss("cssbundle", "~/css/site.css", "~/lib/bootstrap/dist/css/_all-skins.min.css", "~/lib/bootstrap/dist/css/AdminLTE.min.css", "~/lib/bootstrap/dist/css/bootstrap.min.css", "~/lib/bootstrap/dist/css/bootstrap-grid.min.css", "~/lib/bootstrap/dist/css/bootstrap-reboot.min.css", "~/lib/bootstrap/dist/css/ionicons.min.css", "~/lib/bootstrap/dist/css/font-awesome.min.css", "~/lib/bootstrap/dist/css/blue.css", "~/css/font-awesome.min.css", "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic");
+                  bundle.CreateCss("cssbundle", "~/css/site.css", "~/lib/bootstrap/dist/css/_all-skins.min.css", "~/lib/bootstrap/dist/css/AdminLTE.min.css", "~/lib/bootstrap/dist/css/bootstrap.min.css", "~/lib/bootstrap/dist/css/bootstrap-grid.min.css", "~/lib/bootstrap/dist/css/bootstrap-reboot.min.css", "~/lib/bootstrap/dist/css/ionicons.min.css", "~/lib/bootstrap/dist/css/font-awesome.min.css", "~/lib/bootstrap/dist/css/blue.css", "~/css/font-awesome.min.css", "~/css/jquery-ui.css", "~/css/easy-autocomplete.css", "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic");
             });
             app.UseEndpoints(endpoints =>
             {
