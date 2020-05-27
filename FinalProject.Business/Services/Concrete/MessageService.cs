@@ -52,7 +52,6 @@ namespace FinalProject.Business.Services.Concrete
             var chatBoxUser = _uow.ChatRoomUsers.FindByList(x => x.UserId == user1.Id);
             List<ChatRoom> chatRooms = new List<ChatRoom>();
             List<ChatRoomUsers> chatroomUsers = new List<ChatRoomUsers>();
-           
             if (chatBoxUser.Count != 0)
             {
                 foreach (var item in chatBoxUser)

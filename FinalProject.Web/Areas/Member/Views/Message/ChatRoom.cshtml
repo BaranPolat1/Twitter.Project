@@ -36,22 +36,5 @@
 @section scripts2{
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/chat.js"></script>
-    <script>
-        var SayfaSayisi = 1;
-        $(window).scroll(function () {
-            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
-                var recipient = $("#recipientUser").val();
-                $.ajax({
-                    url: '/Member/Message/Chatroom',
-                    data: { "sayfano": SayfaSayisi, "userName": recipient },
-                    success: function (data) {
-                        $("#messageList2").append(data);
-                        SayfaSayisi++;
-
-
-                    }
-                });
-            }
-        });
-    </script>
+   
 }
