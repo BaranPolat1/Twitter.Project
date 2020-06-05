@@ -18,9 +18,10 @@ $(document).on("click", "a.retweet", function (a) {
 $(document).on("click", "a.delete", function (e) {
     e.preventDefault();
     var de = this;
-    $(de).css({ "visibility": "hidden" });
+    var deleteitm = $(de).closest("div.acilar");
+    
     $.post(this.href).then(function (result) {
-
+        deleteitm.remove();
     });
 });
 window.addEventListener('load', function () {
