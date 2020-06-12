@@ -45,13 +45,13 @@ namespace FinalProject.Business.Services.Concrete
         //Dinamik olarak ChatRoom yaratan metodum.
         public ChatRoomDTO GetChatRoom(string userName, string userName2)
         {
-            ChatRoom chat = new ChatRoom();
+            ChatRoom chat = null;
             ChatRoomDTO model = new ChatRoomDTO();
+            List<ChatRoom> chatRooms = new List<ChatRoom>();
             var user1 = _uow.User.Find(x => x.UserName == userName);
             var user2 = _uow.User.Find(x => x.UserName == userName2);
             var chatBoxUser = _uow.ChatRoomUsers.FindByList(x => x.UserId == user1.Id);
-            List<ChatRoom> chatRooms = new List<ChatRoom>();
-            List<ChatRoomUsers> chatroomUsers = new List<ChatRoomUsers>();
+       
             if (chatBoxUser.Count != 0)
             {
                 foreach (var item in chatBoxUser)
@@ -61,36 +61,31 @@ namespace FinalProject.Business.Services.Concrete
 
                 foreach (var item in chatRooms)
                 {
-                    chatroomUsers.AddRange(_uow.ChatRoomUsers.FindByList(x => x.ChatRoomId == item.Id && x.UserId == user2.Id));
-
-                }
-                if (chatroomUsers.Count != 0)
-                {
-                    foreach (var item in chatroomUsers)
+                    if (_uow.ChatRoomUsers.Any(x=>x.ChatRoomId == item.Id && x.UserId == user2.Id))
                     {
-                        //messages1.AddRange(_uow.Message.FindByList(x => x.ChatRoomId == item.ChatRoomId));
-                        chat = _uow.ChatRoom.GetById(item.ChatRoomId);
+                        var chatroomuser = chatBoxUser.Where(x => x.ChatRoomId == item.Id).FirstOrDefault();
+                        chat = _uow.ChatRoom.GetById(chatroomuser.ChatRoomId);
+                    }
+                    else
+                    {
+                        chat = new ChatRoom();
+                        _uow.ChatRoom.Add(chat);
+                        ChatRoomUsers chatRoom = new ChatRoomUsers();
+                        chatRoom.ChatRoomId = chat.Id;
+                        chatRoom.UserId = user1.Id;
+                        _uow.ChatRoomUsers.Add(chatRoom);
+                        ChatRoomUsers chatRoom1 = new ChatRoomUsers();
+                        chatRoom1.ChatRoomId = chat.Id;
+                        chatRoom1.UserId = user2.Id;
+                        _uow.ChatRoomUsers.Add(chatRoom1);
+                        _uow.SaveChange();
+
                     }
                 }
-                else
-                {
-                 
-                    _uow.ChatRoom.Add(chat);
-                    ChatRoomUsers chatRoom = new ChatRoomUsers();
-                    chatRoom.ChatRoomId = chat.Id;
-                    chatRoom.UserId = user1.Id;
-                    _uow.ChatRoomUsers.Add(chatRoom);
-                    ChatRoomUsers chatRoom1 = new ChatRoomUsers();
-                    chatRoom1.ChatRoomId = chat.Id;
-                    chatRoom1.UserId = user2.Id;
-                    _uow.ChatRoomUsers.Add(chatRoom1);
-                    _uow.SaveChange();
-                   
-                }
-
             }
             else
             {
+                chat = new ChatRoom();
                 _uow.ChatRoom.Add(chat);
                 ChatRoomUsers chatRoom = new ChatRoomUsers();
                 chatRoom.ChatRoomId = chat.Id;
@@ -101,7 +96,6 @@ namespace FinalProject.Business.Services.Concrete
                 chatRoom1.UserId = user2.Id;
                 _uow.ChatRoomUsers.Add(chatRoom1);
                 _uow.SaveChange();
-               
             }
             model = _mapper.Map<ChatRoomDTO>(chat);
             return model;
